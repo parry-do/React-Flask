@@ -4,7 +4,7 @@ import './App.css';
 function App() {
   return (
     <main>
-      React⚛️ + Vite⚡ + Replit🌀
+      React⚛️ + Vite⚡ + Flask🧪 + Python 🐍 + Replit🌀 = Awesome 🤯 
     </main>
   );
 }
