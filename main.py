@@ -4,12 +4,13 @@ import requests
 app = Flask(__name__)
 
 
+# TODO: remove initial verification route
 @app.route('/working')
-def home():
-    return 'Changed'
+def working():
+    return {'message': 'working'}
 
 
-# Dev Server: All non-explicit Flask routes are handed to Node.js/Vite/React
+# Dev Server: Other routes to Node.js/Vite/React
 @app.route('/', defaults={'path': ''}, methods=['GET', 'POST', 'DELETE'])
 @app.route('/<path:path>', methods=['GET', 'POST', 'DELETE'])
 def proxy(*args, **kwargs):
@@ -31,4 +32,4 @@ def proxy(*args, **kwargs):
     return (resp.text, resp.status_code, resp.headers.items())
 
 
-app.run(host='0.0.0.0', port=80, debug=True)
+app.run(host='0.0.0.0', port=8080, debug=True)
