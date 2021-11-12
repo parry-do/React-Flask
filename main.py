@@ -1,19 +1,36 @@
+from replit import db, web
 from flask import Flask, request
 import requests
 
 app = Flask(__name__)
+users = web.UserStore()
 
 
-# TODO: remove initial verification route
-@app.route('/working')
-def working():
-    return {'message': 'working'}
+# Persistence: visit logging by user and system-wide
+@app.route('/log')
+@web.authenticated
+def log():
+    hits = users.current.get("hits", 0) + 1
+    users.current["hits"] = hits
+    total = db.get('total', 0) + 1
+    db['total'] = total
+
+    return {"message": {'hits': hits, 'total': db['total']}}
 
 
-# Dev Server: Other routes to Node.js/Vite/React
+# Simple demonstration of user access
+@app.route('/user')
+def user():
+    result = {'message': {'name':web.auth.name}} \
+            if web.auth.name else {'message':{'name':'Not Logged In'}}
+    return result
+
+
+# Dev Server: Proxy all other routes to Node.js/Vite/React
 @app.route('/', defaults={'path': ''}, methods=['GET', 'POST', 'DELETE'])
 @app.route('/<path:path>', methods=['GET', 'POST', 'DELETE'])
 def proxy(*args, **kwargs):
+
     target = 'http://localhost:3000/'
     keywords = {
         'method': request.method,
