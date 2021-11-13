@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import Greeting from './greeting'
 import './App.css';
 
-const UserContext = React.createContext({'name':'Not Logged In'})
+const UserContext = React.createContext()
 
 // Base app
 const App = () => {
+    // User information is gathered
     const [user, setUser] = useState({'name':'Not Logged In'});
     
     useEffect(() => {
@@ -17,6 +19,7 @@ const App = () => {
         []
     );
     
+    // User and global persistence is demonstrated
     const [logs, setLogs] = useState('...');
 
     useEffect(() => {
@@ -29,6 +32,7 @@ const App = () => {
         []
     );
 
+    // Login-conditional rendering
     if (user.name=='Not Logged In') {
         return (
         <main>
@@ -38,18 +42,17 @@ const App = () => {
         </main>)
     } else {
         return (
-        <main>
-            React⚛️+ Vite⚡+ Flask🧪+ Python🐍+ Replit🌀+ Auth🔒 = Awesome🤯
-            <br/>
-            Welcome {user.name}
-            <br/>
-            You've logged in {logs.hits} time(s), total {logs.total} times ever.
-        </main>)
+        <UserContext.Provider value={user}>
+            <main>
+                React⚛️+ Vite⚡+ Flask🧪+ Python🐍+ Replit🌀+ Auth🔒 = Awesome🤯
+                <br/>
+                <Greeting logs={logs}/>
+            </main>
+        </UserContext.Provider>)
     }
 };
 
-// Used in child objects for user context state
-// TODO: demonstrate this
+// Used in child object (greeting) demonstrating context
 export {UserContext};
-// App imported by main.js
+// Imported by main.js
 export default App;
