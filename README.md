@@ -1,4 +1,4 @@
-## Running React on Repl.it
+## React/Flask on Repl.it
 
 [React](https://reactjs.org/) is a popular JavaScript library for building user interfaces.
 
@@ -15,6 +15,28 @@ Using the three in conjunction is one of the fastest ways to build a web app wit
 
 By default this runs a development server.
 
+### Production
+
+To run the production server, change the first line in .replit:<br>
+From: `run="bash development.sh"`  
+To: `run="bash production.sh"`
+
+sudo nano /etc/config.json
+{
+	"SECRET_KEY": "1A37BbcCJh67",
+	"DATABASE_URI": "sqlite:///site.db"
+}
+
+import json
+with open('/etc/config.json') as config_file:
+    config = json.load(config_file)
+app.config['SECRET_KEY'] = config.get('SECRET_KEY')
+app.config['DATABASE_URI'] = config.get('DATABASE_URI')
+
+bash configure.sh "github clone url"
+
 ### Inspiration
 
-Directly inspired by [a previous React Repl](https://replit.com/@replit/Reactjs), and [a previous Flask authentication Repl(@mat1)](https://replit.com/talk/learn/Authenticating-users-with-Replit-Auth/23460). This takes code liberally from both. 
+Directly inspired by [a previous React Repl](https://replit.com/@replit/Reactjs), and [a previous Flask authentication Repl(@mat1)](https://replit.com/talk/learn/Authenticating-users-with-Replit-Auth/23460). This takes code liberally from both.
+
+Production implementation patterned from [this article](https://medium.com/@abalarin/flask-on-linode-a6d6ce2505d0).
