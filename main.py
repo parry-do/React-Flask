@@ -58,13 +58,15 @@ def user():
 ###################################################
 # Static routes by server type
 ###################################################
-ms = ['GET', 'POST', 'DELETE']
-
 if mode == 'development':
     # Dev Server: Proxy other routes to Node.js/Vite server
+    
+    ms = ['GET', 'POST', 'DELETE']
+
     @app.route('/', defaults={'path': ''}, methods=ms)
     @app.route('/<path:path>', methods=ms)
     def proxy(*args, **kwargs):
+
         # Blind, unopinionated proxy
         url = request.url.replace( \
             request.host_url,

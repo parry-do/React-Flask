@@ -2,7 +2,7 @@
 
 [React](https://reactjs.org/) is a popular JavaScript library for building user interfaces.
 
-[Vite](https://vitejs.dev/) is a blazing fast frontend build tool that includes features like Hot Module Reloading (HMR), optimized builds, and TypeScript support out of the box.
+[Vite](https://vitejs.dev/) is a blazing fast frontend build tool with Hot Module Reloading (HMR), optimized builds, and TypeScript.
 
 [Flask](https://flask.palletsprojects.com/) is a bare-bones Python micro web framework based on Werkzeug, Jinja2, and good intentions.
 
@@ -11,11 +11,16 @@ Using the three in conjunction is one of the fastest ways to build a web app wit
 ### Getting Started
 - Hit run
 - Edit [src/App.jsx](#src/App.jsx) and watch it live update!
-- Edit main.py to change the backend 
+- Edit main.py to change the backend
+- Login must be done through another tab
 
-By default this runs a development server.
+By default this runs a development server, but that can be changed
+
+### Development
+The development server is too slow to use in real time, but uses Vite to interpret the React code live, so building a new website is eacy.
 
 ### Production
+The production server does not support live React instead building static HTML/JS, so is more like a real deployment using gunicorn as a server.
 
 To run the production server, change the first line in .replit:<br>
 From: `run="bash development.sh"`  

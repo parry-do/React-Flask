@@ -1,8 +1,8 @@
 [tool.poetry]
-name = "repl_python3_Flask-Template"
+name = "repl_React_Flask_Full_Deploy-Template"
 version = "0.1.0"
-description = ""
-authors = ["Your Name <you@example.com>"]
+description = "React+Flask full dev to deploy kit"
+authors = ["Matthew Parry parry.do@gmail.com"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
