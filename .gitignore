@@ -2,6 +2,8 @@ node_modules
 dist
 dist-ssr
 .DS_Store
+__py*
+
 *.local
 .pyc
 *_metadata*

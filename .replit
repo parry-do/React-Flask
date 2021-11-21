@@ -1,3 +1,4 @@
-run="bash development.sh"
-language = "python"
-entrypoint="main.py"
+run         = "bash scripts/development.sh"
+onBoot      = "npm install"
+language    = "python"
+entrypoint  = "main.py"

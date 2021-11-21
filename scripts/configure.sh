@@ -1,4 +1,5 @@
 #!/bin/bash
+cd ..
 echo "Configuring main..."
 apt update && apt upgrade
 

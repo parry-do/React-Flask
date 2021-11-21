@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Greeting from './greeting'
-//import './App.css';
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
+
 const UserContext = React.createContext()
 
 // Base app
@@ -23,11 +23,9 @@ const App = () => {
         []
     );
     
-    // User and global persistence is demonstrated
+    // User and global persistence demonstrated with logging
     useEffect(
         () => {
-            console.log(user.name != 'Not Logged In')
-            console.log(user.name)
             if (user.name != 'Not Logged In') {
                 fetch('/log')
                 .then(res => res.json())

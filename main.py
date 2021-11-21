@@ -1,6 +1,6 @@
 import os
 from replit import db, web
-from flask import Flask, request, send_file, send_from_directory
+from flask import Flask, request, send_from_directory
 import requests
 
 # Appropriate Flask app prepared

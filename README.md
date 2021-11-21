@@ -6,7 +6,7 @@
 
 [Flask](https://flask.palletsprojects.com/) is a bare-bones Python micro web framework based on Werkzeug, Jinja2, and good intentions.
 
-Using the three in conjunction is one of the fastest ways to build a web app with a powerful backend.
+These three are one of the fastest ways to build a web app with a powerful backend.
 
 ### Getting Started
 - Hit run
@@ -44,4 +44,4 @@ bash configure.sh "github clone url"
 
 Directly inspired by [a previous React Repl](https://replit.com/@replit/Reactjs), and [a previous Flask authentication Repl(@mat1)](https://replit.com/talk/learn/Authenticating-users-with-Replit-Auth/23460). This takes code liberally from both.
 
-Production implementation patterned from [this article](https://medium.com/@abalarin/flask-on-linode-a6d6ce2505d0).
+Deployment implementation patterned from [this article](https://medium.com/@abalarin/flask-on-linode-a6d6ce2505d0).
