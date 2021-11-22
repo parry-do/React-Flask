@@ -1,6 +1,12 @@
+// Basic Imports
+import {do_get, do_post, do_put, do_delete} from './request'
+
+//React Imports
 import React, { useState, useEffect } from 'react';
 import Greeting from './greeting'
 import Login from './login'
+
+// React-Bootstrap Imports
 import Card from 'react-bootstrap/Card'
 import Button from 'react-bootstrap/Button'
 import Container from 'react-bootstrap/Container'
@@ -12,38 +18,45 @@ const UserContext = React.createContext()
 // Base app
 const App = () => {
     // Local reactive variables
-    const [user, setUser] = useState({'name':'Not Logged In'});
+    const [user, setUser] = useState({'name':null, 'hits':null});
     const [logs, setLogs] = useState({'hits':'...', 'times':'...'})
     const [loginShow, setLoginShow] = useState(false);
     
-    // User information is gathered
+    // User information gathered
     useEffect(
         () => {
-            fetch('/user')
-                .then(res => res.json())
-                .then(data => {
-                    setUser(data.message);
-                });
+            do_get('/user').then(
+                data => {
+                    if (data.status =='SUCCESS') {
+                        setUser(data.message);
+                    } else {
+                        setUser({
+                            'name': null,
+                            'hits': null
+                        });
+                    }                    
+                }
+            );
         },
         []
     );
     
-    // User and global persistence demonstrated with logging
+    // User and global persistence with logging
     useEffect(
         () => {
-            if (user.name != 'Not Logged In') {
-                fetch('/log')
-                .then(res => res.json())
-                .then(data => {
-                    setLogs(data.message);
-                });
+            if (!!user) {
+                do_get('/log').then(
+                    data => {
+                        setLogs(data.message)                 
+                    }
+                );
             }
         },
         [user]
     );
 
     // Login-conditional rendering
-    if (user.name=='Not Logged In') {
+    if (user.name == null) {
         return (
         <Container fluid><Row><Col>
         <Card className="text-center">
@@ -55,7 +68,6 @@ const App = () => {
                 React⚛️+Vite⚡+Replit🌀=Good👍
                 </Card.Title>
                 <Card.Text>
-                    {user.name}.{' '}
                     <a href="." 
                         target="_blank"
                         rel="noopener noreferrer"
@@ -79,7 +91,7 @@ const App = () => {
         )
     } else {
         return (
-            <UserContext.Provider value={user}>
+            <UserContext.Provider value={user.name}>
             <Container fluid><Row className="m-3"><Col xs>
             <Card className="text-center">
                 <Card.Header>

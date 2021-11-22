@@ -42,6 +42,6 @@ bash configure.sh "github clone url"
 
 ### Inspiration
 
-Directly inspired by [a previous React Repl](https://replit.com/@replit/Reactjs), and [a previous Flask authentication Repl(@mat1)](https://replit.com/talk/learn/Authenticating-users-with-Replit-Auth/23460). This takes code liberally from both.
+Directly inspired by [a previous React Repl](https://replit.com/@replit/Reactjs).
 
 Deployment implementation patterned from [this article](https://medium.com/@abalarin/flask-on-linode-a6d6ce2505d0).
