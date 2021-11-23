@@ -64,7 +64,7 @@ def unauthorized():
 
     return {
         'status': 'FAILED',
-        'message': responses[path] if path in responses else "Not Logged In"
+        'message': responses.get(path, "Not Logged In")
     }
 
 
