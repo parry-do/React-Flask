@@ -1,18 +1,28 @@
 [tool.poetry]
 name = "repl_React_Flask_Full_Deploy-Template"
 version = "0.1.0"
-description = "React+Flask full dev to deploy kit"
+description = "React+Flask Full dev to deploy"
 authors = ["Matthew Parry parry.do@gmail.com"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
-Flask = "^2.0.1"
-vite = "^1.5.2"
-replit = "^3.2.4"
-gunicorn = "^20.1.0"
+
+# Flask dependencies
+Flask = "^2.0.0"
 Flask-Login = "^0.5.0"
 
+# Mongo dependencies
+pymongo = "^3.12.1"
+mongoengine = "^0.23.1"
+blinker = "^1.4"
+
+# Server dependencies
+gunicorn = "^20.1.0"
+vite = "^1.5.2"
+
 [tool.poetry.dev-dependencies]
+replit = "^3.2.4"
+mongomock = "^3.23.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

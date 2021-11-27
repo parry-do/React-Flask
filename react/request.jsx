@@ -1,4 +1,3 @@
-
 const do_get = (url='/') => {
     // Vanilla GET. Returns promise
     return fetch(
@@ -16,11 +15,12 @@ const do_post = (body, url='/') => {
         {
             method : 'POST',
             headers: {'Content-Type':'application/json'},
-            body   : JSON.stringify(content)
+            body   : JSON.stringify(body)
         }
-    ).then(
-        response => response.json()
-    );
+    ).then( response => {
+        console.log(response)
+        response.json()
+    });
     //e.g.  .then(data => this.setState({ postId: data.id }));
 }
 
@@ -31,7 +31,7 @@ const do_put = (body, url='/') => {
         {
             method : 'PUT',
             headers: {'Content-Type':'application/json'},
-            body   : JSON.stringify(content)
+            body   : JSON.stringify(body)
         }
     ).then(
         response => response.json()

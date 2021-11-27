@@ -4,7 +4,21 @@ import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form';
 
+import {UserContext} from './App';
+
 function Login(props) {
+    const {do_login} = React.useContext(UserContext)
+    const [username, setUsername] = React.useState('')
+    const [password, setPassword] = React.useState('')
+    
+    const submit = e => {
+        e.preventDefault()
+        do_login({
+            'username':username,
+            'password':password
+        })
+    }
+
     return (
     <Modal
         {...props}
@@ -22,14 +36,23 @@ function Login(props) {
                 id="main"
                 className="d-grid h-100"
                 style={{
-                    "place-items": "center center",
+                    "placeItems": "center center",
                     "display":"grid"
                 }}
             >
-            <Form id="login" className="text-center p-3 w-100">
-                <Form.Group controlId="user_name">
+            <Form 
+                id="login"
+                onSubmit={submit}
+                className="text-center p-3 w-100"
+            >
+                <Form.Group controlId="username">
                     <Form.Control
                         type="text"
+                        value={username}
+                        onChange={
+                            ({target:{value}}) => 
+                            setUsername(value)
+                        }
                         size="lg"
                         placeholder="User Name"
                         autoComplete="username"
@@ -39,6 +62,11 @@ function Login(props) {
                 <Form.Group controlId="password">
                     <Form.Control
                         type="password"
+                        value={password}
+                        onChange={
+                            ({target:{value}}) => 
+                            setPassword(value)
+                        }
                         size="lg"
                         placeholder="Password"
                         autoComplete="current-password"
@@ -55,7 +83,7 @@ function Login(props) {
                     />
                 </Form.Group>
                 <div className="d-grid">
-                    <Button variant="primary" size="lg">
+                    <Button variant="primary" size="lg" type="submit">
                         Sign in
                     </Button>
                 </div>

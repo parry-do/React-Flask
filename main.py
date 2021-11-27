@@ -1,18 +1,15 @@
 import os
-import json
 import requests
-from replit import db
 
 from flask import (
     Flask,
     request,
     send_from_directory,
 )
-import flask_login as Login
-from flask_login import current_user as current
-import werkzeug.security as security
 
-from python.user import User
+import flask_login as login
+
+from python.db import connect
 
 ###################################################
 # App Configuration
@@ -27,152 +24,108 @@ else:
     # Replit prod/dev, statics by Flask
     app = Flask(__name__, static_url_path='/dists')
 
-# Server encryption key
-if os.environ.get('SECRET_KEY'):
-    app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY')
-else:
-    with open('flask.config.json') as config_file:
-        app.config['SECRET_KEY'] = json.load(config_file).get('SECRET_KEY')
-
 # App services initiation
-auth = Login.LoginManager()
-auth.init_app(app)
-
+db, User, Global, get_user = connect(app)
 
 ###################################################
 # Login routes
 ###################################################
-def load_user(user_id):
-    try:
-        return User(user_id, db)
-    except ValueError:
-        return None
-
-
-auth.user_loader(load_user)
-
-
-@auth.unauthorized_handler
-def unauthorized():
-    responses = {
-        '/user': 'Login required for User Information',
-        '/log': 'Login required to access Logs',
-    }
-
-    # Path substring of the url
-    path = '/'.join([''] + request.url.split('/')[3:])
-
+@app.route('/signin', methods=['POST'])
+def signin():
+    req = request.get_json(force=True)
+    username = req.get('username', None)
+    password = req.get('password', None)
+    print(f"Received login with {req}")
+    user = get_user(username, password)
+    if user:
+        login.login_user(user)
+        return {
+            'status': 'SUCCESS',
+            'message': {
+                'name': f'Signed in as {user["username"]}'
+            }
+        }
     return {
         'status': 'FAILED',
-        'message': responses.get(path, "Not Logged In")
-    }
-
-
-@app.route('/login')
-def login():
-    user_id = request.form.get('user_name')
-    password = request.form.get('password')
-    remember = bool(request.form.get('remember'))
-    user = load_user(user_id)
-
-    if user and security.check_password_hash(user['password'], password):
-        security.login_user(user, remember=remember)
-    else:
-        return {
-            'status': 'FAILED',
-            'message': 'Wrong user name or password',
-        }
-
-    # User is created
-    user = User(
-        user_id,
-        db,
-        password=security.generate_password_hash(
-            password,
-            method='sha256',
-        ),
-    )
-
-    return {
-        'status': 'SUCCESS',
         'message': {
-            'name': user.get_id,
-            'hits': user.data['hits'],
+            'name': 'Not Logged In'
         }
     }
-
 
 @app.route('/signup', methods=['POST'])
 def signup():
-    user_id = request.form.get('user_name')
-    password = request.form.get('password')
+    req = request.get_json(force=True)
+    username = req.get('username', None)
+    password = req.get('password', None)
 
-    if load_user(user_id):  # User exists
+    if User.objects(username=username):
+        # User exists
         return {
             'status': 'FAILED',
             'message': 'User already exists',
         }
 
-    # User is created
     user = User(
-        user_id,
-        db,
-        password=security.generate_password_hash(
-            password,
-            method='sha256',
-        ),
+        username=username,
+        password=password,
     )
 
+    login.login_user(user)
+
     return {
-        'status': 'SUCCESS',
-        'message': f'User {user.get_id()} created',
+        'status'    : 'SUCCESS',
+        'message'   : {
+            'username'  : user.username,
+            'hits'      : user.hits,
+        }
     }
-
-
-@app.route('/logout')
-def logout():
-    return 'Logout'
-
 
 ###################################################
 # Flask-specific routes
 ###################################################
 # Persistence: logs visits, by user and system-wide
 @app.route('/log')
-@Login.login_required
+@login.login_required
 def log():
     # Visits by user
-    hits = current.get("hits", 0) + 1
-    current["hits"] = hits
+    hits = login.current_user.hits + 1
+    login.current_user.hits = hits
+    login.current_user.save()
 
     # Visits system-wide
-    total = db.get('total', 0) + 1
-    db['total'] = total
+    visits = Global.objects.first()
+    total = visits['total'] + 1
+    visits['total'] = total
+    visits.save()
 
     return {
+        'status': 'SUCCESS',
         'message': {
             'hits': hits,
-            'total': db['total'],
+            'total': total,
         },
-        'status': 'success',
     }
 
 
 # Simple demonstration of user access
-@app.route('/user')
-@Login.login_required
+@app.route('/user', methods=['GET'])
 def user():
-    return {
-        'status': 'success',
-        'message': {
-            'name': current.name
+    if login.current_user.is_authenticated:
+        return {
+            'status': 'SUCCESS',
+            'message': {
+                'username'  : login.current_user.username,
+                'hits'      : login.current_user.hits,
+            }
+        }   
+    else:
+        return {
+            'status': 'FAILED',
+            'message': {
+                'username'  : None,
+                'hits'      : None,
+            }
         }
-    } if current.name else {
-        'status': 'success',
-        'message': {
-            'name': 'Not Logged In'
-        }
-    }
 
 
 ###################################################

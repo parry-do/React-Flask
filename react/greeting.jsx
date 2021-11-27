@@ -5,7 +5,7 @@ import {UserContext} from './App';
 // as well as typical prop arguments
 const Greeting = ({logs}) => {
     // user information taken from parent
-    const user = useContext(UserContext)
+    const {user} = useContext(UserContext)
  
     return (
         <>
