@@ -1,4 +1,7 @@
+import {do_post} from './request.jsx'
+
 import React from 'react';
+
 import Container from 'react-bootstrap/Container'
 import Modal from 'react-bootstrap/Modal'
 import Button from 'react-bootstrap/Button'
@@ -6,14 +9,29 @@ import Form from 'react-bootstrap/Form';
 
 import {UserContext} from './App';
 
-function Login(props) {
-    const {do_login} = React.useContext(UserContext)
+function Signin(props) {
+    // Signin modal window and controlls
+    const {getUser} = React.useContext(UserContext)
     const [username, setUsername] = React.useState('')
     const [password, setPassword] = React.useState('')
     
+    const signin = (data) => {
+        do_post(
+            data,
+            '/signin'
+        ).then(data => {
+            if (data.status == 'SUCCESS') {
+                getUser();
+                props.children.onSignIn();
+            } else {
+                // TODO: failure notice here
+            }
+        })
+    }
+
     const submit = e => {
         e.preventDefault()
-        do_login({
+        signin({
             'username':username,
             'password':password
         })
@@ -28,7 +46,7 @@ function Login(props) {
         >
         <Modal.Header style={{background: "#d0d0d0"}}>
             <Modal.Title id="contained-modal-title-vcenter">
-            Login
+            Sign in
             </Modal.Title>
         </Modal.Header>
         <Modal.Body style={{background: "#f0f0f0"}}>
@@ -41,7 +59,7 @@ function Login(props) {
                 }}
             >
             <Form 
-                id="login"
+                id="signin"
                 onSubmit={submit}
                 className="text-center p-3 w-100"
             >
@@ -94,4 +112,50 @@ function Login(props) {
     );
 }
 
-export default Login
+function Auth(props) {
+    // Authorization buttons and controls
+    const {user, setUser} = React.useContext(UserContext)
+    const [signinShow, setSigninShow] = React.useState(false);
+
+    const signout = () => {
+        do_post(
+            {},
+            '/signout'
+        ).then(data => {
+            if (data.status == 'SUCCESS') {
+                setUser({
+                    'username':null, 'hits':null
+                })
+            } else {
+                // TODO: failure notice here
+            }
+        })
+    }
+    return (
+        <>
+        {(!user.username) &&
+        <>
+        <Button
+            variant="primary"
+            onClick={() => setSigninShow(true)}>
+            Signin
+        </Button>
+        <Signin
+            show={signinShow}
+            onHide={() => setSigninShow(false)}
+        >
+        {{'onSignIn': () => setSigninShow(false)}}
+        </Signin>
+        </>
+        } {(!!user.username) &&
+        <Button
+            variant="primary"
+            onClick={signout}>
+            Signout
+        </Button>
+        }
+        </>
+    )
+}
+
+export default Auth

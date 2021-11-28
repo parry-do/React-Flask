@@ -1,4 +1,4 @@
-## React/Flask on Repl.it
+## React+Flask on Repl.it
 
 [React](https://reactjs.org/) is a popular JavaScript library for building user interfaces.
 
@@ -12,19 +12,22 @@ These three are one of the fastest ways to build a web app with a powerful backe
 - Hit run
 - Edit [src/App.jsx](#src/App.jsx) and watch it live update!
 - Edit main.py to change the backend
-- Login must be done through another tab
+- Using cookies, login must be done through a separate tab
+  - Username: admin Password: admin
 
-By default this runs a development server, but that can be changed
+By default this runs a development server. Change that below.
 
 ### Development
-The development server is too slow to use in real time, but uses Vite to interpret the React code live, so building a new website is eacy.
+The development server uses Vite to interpret React code live and is too slow to use in real time, but it makes building a new website easy.
 
 ### Production
-The production server does not support live React instead building static HTML/JS, so is more like a real deployment using gunicorn as a server.
+The production server does not support live React and builds static HTML/JS like a real deployment using a gunicorn server.
 
 To run the production server, change the first line in .replit:<br>
 From: `run="bash development.sh"`  
 To: `run="bash production.sh"`
+
+### Deployment
 
 sudo nano /etc/config.json
 {
@@ -39,6 +42,9 @@ app.config['SECRET_KEY'] = config.get('SECRET_KEY')
 app.config['DATABASE_URI'] = config.get('DATABASE_URI')
 
 bash configure.sh "github clone url"
+
+### Next
+This isn't ready for use in the real world. Recaptcha protections, OAuth signins, and continuous integration as just a few other features that could be added and require specific tokens. This builds the backbone for a great webapp.
 
 ### Inspiration
 

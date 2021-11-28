@@ -35,7 +35,6 @@ def signin():
     req = request.get_json(force=True)
     username = req.get('username', None)
     password = req.get('password', None)
-    print(f"Received login with {req}")
     user = get_user(username, password)
     if user:
         login.login_user(user)
@@ -48,7 +47,26 @@ def signin():
     return {
         'status': 'FAILED',
         'message': {
-            'name': 'Not Logged In'
+            'name': 'Not signed in'
+        }
+    }
+
+@app.route('/signout', methods=['POST'])
+@login.login_required
+def signout():
+    user = login.current_user
+    if user:
+        login.logout_user()
+        return {
+            'status': 'SUCCESS',
+            'message': {
+                'name': f'Signed out'
+            }
+        }
+    return {
+        'status': 'FAILED',
+        'message': {
+            'name': 'Not signed in'
         }
     }
 

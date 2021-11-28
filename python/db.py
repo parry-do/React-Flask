@@ -42,9 +42,19 @@ def connect(app):
     login_manager = login.LoginManager()
     login_manager.init_app(app)
 
-    @login_manager.user_loader
-    def user_loader(username):
-        return User.objects.get(username=username)
+    def get_user(username, password=None):
+        "Checks password if not None"
+        try:
+            user = User.objects.get(username=username)
+        except mongoengine.DoesNotExist:
+            return None
+        if password is None:
+            match = True
+        else:
+            match = check_hash(user['password'], password)
+        return user if user and match else None
+
+    login_manager.user_loader(get_user)
 
     @login_manager.unauthorized_handler
     def unauthorized_handler():
@@ -62,16 +72,8 @@ def connect(app):
 
     if mode != 'deployment':
         print('*' * 10, 'Creating Dummy Database', '*' * 10)
-        User(username='Admin', password='asdfqwer')
-
-    def get_user(username, password=None):
-        "Checks password if not None"
-        user = User.objects.get(username=username)
-        if password is None:
-            match = True
-        else:
-            match = check_hash(user['password'], password)
-        return user if user and match else None
+        User(username='admin', password='admin')
+        User(username='user', password='user')
 
     class Global(mongoengine.Document):
         name  = mongoengine.fields.StringField(unique=True)

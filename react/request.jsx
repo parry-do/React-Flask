@@ -1,15 +1,23 @@
+const json_or_empty = (response) => {
+    try {
+        return response.json()
+    } catch (error) {
+        return {}
+    }
+}
+
 const do_get = (url='/') => {
-    // Vanilla GET. Returns promise
+    // Vanilla GET. Returns json promise
     return fetch(
         url
     ).then(
-        response => response.json()
+        response => json_or_empty(response)
     );
     //e.g.    .then(data => this.setState({data}));
 }
 
 const do_post = (body, url='/') => {
-    // Vanilla POST of JSON body. Returns promise
+    // Vanilla POST of JSON body. Returns json promise
     return fetch(
         url, 
         {
@@ -17,15 +25,12 @@ const do_post = (body, url='/') => {
             headers: {'Content-Type':'application/json'},
             body   : JSON.stringify(body)
         }
-    ).then( response => {
-        console.log(response)
-        response.json()
-    });
+    ).then( response => json_or_empty(response));
     //e.g.  .then(data => this.setState({ postId: data.id }));
 }
 
 const do_put = (body, url='/') => {
-    // Vanilla PUT of JSON body. Returns promise
+    // Vanilla PUT of JSON body. Returns json promise
     return fetch(
         url,
         {
@@ -34,7 +39,7 @@ const do_put = (body, url='/') => {
             body   : JSON.stringify(body)
         }
     ).then(
-        response => response.json()
+        response => json_or_empty(response)
     );
     //e.g.  .then(data => this.setState({ postId: data.id }));
 }
