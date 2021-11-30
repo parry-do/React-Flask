@@ -12,8 +12,8 @@ const Greeting = ({logs}) => {
             Welcome {user.username}
             <br/>
             You've visited this page{' '} 
-            {logs.hits} time{(logs.hits>1)?'s':''}, 
-            total {logs.total} time{(logs.total>1)?'s ':' '}
+            {logs.hits} time{(logs.hits>1)?'s':''}. 
+            Total visits: {logs.total} time{(logs.total>1)?'s ':' '}
             by everyone ever.
         </>
     )

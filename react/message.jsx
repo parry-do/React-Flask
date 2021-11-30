@@ -29,16 +29,8 @@ const Message = (props) => {
         <>
         {(!user.username) &&
         <>
-        <a href="." 
-            target="_blank"
-            rel="noopener noreferrer"
-        >
-        Sign in using another tab to see more.
-        </a>
-
-        <br/>
-        <span>(Cookie authorization requires window outside of Replit)</span>
-        <br/>
+        <span>Sign in to see more.</span>
+        <hr/>
         <span>Username: admin, Password: admin</span>
         <br/>
         <span>or</span>
