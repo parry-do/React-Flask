@@ -14,6 +14,8 @@ These three are one of the fastest ways to build a web app with a powerful backe
 - Edit main.py to change the backend
 - Using cookies, login must be done through a separate tab
   - Username: admin Password: admin
+  - or
+  - Username: user  Password: useruser
 
 By default this runs a development server. Change that below.
 

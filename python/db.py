@@ -3,7 +3,6 @@ import json
 
 import flask_login as login
 
-from werkzeug.security import generate_password_hash as make_hash
 from werkzeug.security import check_password_hash as check_hash
 
 import mongoengine
@@ -23,7 +22,7 @@ def connect(app):
                 app.config[key] = json.load(config_file).get(key, default)
 
     get_key('SECRET_KEY', 'KEEPITSECRETkeepitsafe')
-    get_key('COOKIE_LIFESPAN', {'months': 6})
+    get_key('COOKIE_LIFESPAN', {'months': 12})
 
     mode = os.environ.get('MODE')
     if mode is None:
@@ -37,43 +36,35 @@ def connect(app):
         db = mongoengine
         db.connect("test", host="mongomock://localhost")
 
-    # security system is initialized
+    # User class prepared
     User = make_user_class(db)
-    login_manager = login.LoginManager()
-    login_manager.init_app(app)
-
+    mongoengine.signals.post_save.connect(User.post_save, sender=User)
     def get_user(username, password=None):
         "Checks password if not None"
         try:
             user = User.objects.get(username=username)
         except mongoengine.DoesNotExist:
             return None
+        
         if password is None:
             match = True
         else:
             match = check_hash(user['password'], password)
         return user if user and match else None
 
+    # security system is initialized
+    login_manager = login.LoginManager()
+    login_manager.init_app(app)
     login_manager.user_loader(get_user)
 
     @login_manager.unauthorized_handler
     def unauthorized_handler():
         return 'Unauthorized'
 
-    def update_modified(sender, document):
-        try:
-            # Automatically hash passwords
-            document['password'] = make_hash(document['password'])
-            document.save()
-        except Exception:
-            pass
-
-    mongoengine.signals.post_init.connect(update_modified)
-
     if mode != 'deployment':
         print('*' * 10, 'Creating Dummy Database', '*' * 10)
-        User(username='admin', password='admin')
-        User(username='user', password='user')
+        User(username='admin', password='admin').save()
+        User(username='user', password='useruser').save()
 
     class Global(mongoengine.Document):
         name  = mongoengine.fields.StringField(unique=True)

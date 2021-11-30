@@ -2,6 +2,8 @@ from flask_login import UserMixin
 
 from mongoengine import Document, fields
 
+from werkzeug.security import generate_password_hash as make_hash
+
 def make_user_class(db):
     "Creates the User class per db provided"
 
@@ -20,5 +22,15 @@ def make_user_class(db):
 
         def __repr__(self):
             return f"<User:{self.username} {self.password}>"
+        
+        def __str__(self):
+            return self.__repr__()
+    
+        @classmethod
+        def post_save(cls, sender, document, created):
+            # Automatically hash passwords on User creation
+            if created:
+                document['password'] = make_hash(document['password'])
+                document.save()
 
     return User

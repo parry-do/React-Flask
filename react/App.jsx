@@ -42,7 +42,7 @@ const App = () => {
 
     return (
         <UserContext.Provider value={{user, setUser, getUser}}>
-        <Container fluid><Row><Col>
+        <Container><Row><Col>
         <Card className="text-center">
             <Card.Header>
             React+Flask Full Deploy

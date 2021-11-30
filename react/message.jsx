@@ -43,7 +43,7 @@ const Message = (props) => {
         <br/>
         <span>or</span>
         <br/>
-        <span>Username: user, Password: user</span>
+        <span>Username: user, Password: useruser</span>
         </>
         } {(!!user.username) &&
         <Greeting logs={logs}/>

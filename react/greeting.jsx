@@ -9,7 +9,7 @@ const Greeting = ({logs}) => {
  
     return (
         <>
-            Welcome {user.name}
+            Welcome {user.username}
             <br/>
             You've visited this page{' '} 
             {logs.hits} time{(logs.hits>1)?'s':''}, 

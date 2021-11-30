@@ -36,19 +36,18 @@ def signin():
     username = req.get('username', None)
     password = req.get('password', None)
     user = get_user(username, password)
+
     if user:
         login.login_user(user)
         return {
             'status': 'SUCCESS',
             'message': {
-                'name': f'Signed in as {user["username"]}'
+                'username': f'Signed in as {user["username"]}'
             }
         }
     return {
         'status': 'FAILED',
-        'message': {
-            'name': 'Not signed in'
-        }
+        'message': 'Incorrect user name or password'
     }
 
 @app.route('/signout', methods=['POST'])
@@ -80,14 +79,15 @@ def signup():
         # User exists
         return {
             'status': 'FAILED',
-            'message': 'User already exists',
+            'message': 'User already exists with that user name. Pick another.',
         }
 
     user = User(
         username=username,
         password=password,
     )
-
+    user.save()
+    
     login.login_user(user)
 
     return {
