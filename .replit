@@ -1,4 +1,4 @@
 run         = "bash scripts/development.sh"
-onBoot      = "npm install"
+onBoot      = "python -m poetry install && npm install"
 language    = "python-python3-poetry"
 entrypoint  = "main.py"
