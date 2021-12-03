@@ -3,6 +3,8 @@ import React from 'react';
 
 import Greeting from './greeting'
 
+import {Grid, Typography} from '@mui/material'
+
 import {UserContext} from './App';
 
 const Message = (props) => {
@@ -28,15 +30,26 @@ const Message = (props) => {
     return (
         <>
         {(!user.username) &&
-        <>
-        <span>Sign in to see more.</span>
-        <hr/>
-        <span>Username: admin, Password: admin</span>
-        <br/>
-        <span>or</span>
-        <br/>
-        <span>Username: user, Password: useruser</span>
-        </>
+        <Grid container spacing={2}>      
+            <Grid item xs={12}>
+                <Typography component='h1' variant='h5' >
+                    Sign in to see more.
+                </Typography>
+            </Grid>
+            <Grid item xs={12}>
+                <Typography variant="caption">
+                    Username: admin, Password: admin
+                </Typography>
+            </Grid>
+            <Grid item xs={12}>
+                <Typography variant="caption">or</Typography>
+            </Grid>
+            <Grid item xs={12}>
+                <Typography variant="caption">
+                    Username: user, Password: useruser
+                </Typography>
+            </Grid>
+        </Grid>
         } {(!!user.username) &&
         <Greeting logs={logs}/>
         }

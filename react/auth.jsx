@@ -1,49 +1,62 @@
-import {do_post} from './request.jsx'
-
 import React from 'react';
 
+import {do_post} from './request'
 import AuthForm from './authform'
-
-import Modal from 'react-bootstrap/Modal'
-import Container from 'react-bootstrap/Container'
-import Button from 'react-bootstrap/Button'
-import Form from 'react-bootstrap/Form';
-import Alert from 'react-bootstrap/Alert';
-
+import Scrolldal from './scrolldal'
 import {UserContext} from './App';
+
+import {
+    Avatar, Button, Card, CardActions, CardActionArea, 
+    CardContent, CardHeader, Typography 
+} from '@mui/material'
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+const theme = createTheme();
 
 function Signin(props) {
     // Signin modal window and controls
     const [signIn, setSignIn] = React.useState(true)
 
     return (
-    <Modal {...props} aria-labelledby="modal">
-        <Modal.Header>
-            <Modal.Title id="modal">
-                {(signIn) ? "Sign In" : "Sign Up"}
-            </Modal.Title>
-            <Button 
-                variant={(signIn) ? "primary" : "secondary"}
+    <Scrolldal {...props} 
+        sx={{margin:'5%', marginBottom:0, overflow:'auto'}}
+    ><Card>
+    <CardHeader
+        avatar={<Avatar sx={{ 
+                    m: 1, 
+                    bgcolor: signIn?'primary.main':'secondary.main'
+                }}
+            >
+                <LockOutlinedIcon />
+            </Avatar>
+        }
+        action={<Button 
+                sx={{'bgcolor':(signIn) ? "primary" : "secondary"}}
                 onClick={({target:{value}}) => setSignIn(!signIn)}
             >
                 {(signIn) ? "Sign Up Instead" : "Sign In Instead"}
             </Button>
-        </Modal.Header>
-        <Modal.Body style={{background: "#f0f0f0"}}>
-            <AuthForm
-                onSignIn  = {props.children.onSignIn}
-                signIn    = {signIn}
-                setSignIn = {setSignIn}
-            />
-        </Modal.Body>
-    </Modal>
+        }
+        title={<Typography component="h1" variant="h5">
+                {signIn ? 'Sign In' : 'Sign Up'} 
+            </Typography>
+        }
+    />
+    <CardContent>
+        <AuthForm
+            signIn        = {signIn}
+            setSignIn     = {setSignIn}
+            setsigninshow = {props.children.setsigninshow}
+        />
+    </CardContent>
+    </Card></Scrolldal>
     );
 }
 
 function Auth(props) {
     // Authorization buttons and controls
     const {user, setUser} = React.useContext(UserContext)
-    const [signinShow, setSigninShow] = React.useState(false);
+    const [signInShow, setSignInShow] = React.useState(false);
 
     const signout = () => {
         do_post(
@@ -61,15 +74,24 @@ function Auth(props) {
         <>
             {(!user.username) &&
             <>
-                <Button variant="primary" onClick={() => setSigninShow(true)}>
+                <Button 
+                    fullWidth
+                    variant='contained'
+                    bgcolor='primary'
+                    onClick={() => setSignInShow(true)}
+                >
                     Sign In or Sign Up
                 </Button>
-                <Signin show={signinShow} onHide={() => setSigninShow(false)}>
-                    {{'onSignIn' : () => setSigninShow(false)}}
-                </Signin>
+                <Signin open={signInShow}>{{setsigninshow:setSignInShow}}</Signin>
             </>
         } {(!!user.username) &&
-            <Button variant="primary" onClick={signout}>
+            <Button 
+                fullWidth
+                variant='contained'
+                bgcolor='primary'
+                onClick={() => setSignInShow(true)}
+                onClick={signout}
+            >
                 Signout
             </Button>
         }
