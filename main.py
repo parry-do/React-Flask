@@ -16,7 +16,7 @@ from python.db import connect
 ###################################################
 # Server mode
 mode = os.environ.get('MODE')
-if mode is None:
+if mode is None or mode=='deployment:
     # Deployment server, statics by reverse proxy
     mode = 'deployment'
     app = Flask(__name__)

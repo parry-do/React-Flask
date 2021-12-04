@@ -1,21 +1,24 @@
 import React, {useContext, useEffect} from 'react';
 import {UserContext} from './App';
 
-// Demonstrates user context sharing from App's UserContext
-// as well as typical prop arguments
+import {Grid, Typography} from '@mui/material';
+
+// Demonstrates UserContext
 const Greeting = ({logs}) => {
-    // user information taken from parent
     const {user} = useContext(UserContext)
  
     return (
-        <>
-            Welcome {user.username}
-            <br/>
-            You've visited this page{' '} 
-            {logs.hits} time{(logs.hits>1)?'s':''}. 
-            Total visits: {logs.total} time{(logs.total>1)?'s ':' '}
-            by everyone ever.
-        </>
+        <Grid container spacing={2}>
+            <Grid item xs={12}>Welcome {user.username}</Grid>
+            <Grid item xs={12} sm={6}>
+                You've visited this page{' '} 
+                {logs.hits} time{(logs.hits>1)?'s':''}.
+            </Grid>
+            <Grid item xs={12} sm={6}>
+                Total visits: {logs.total} time{(logs.total>1)?'s ':' '}
+                by everyone ever.
+            </Grid>
+        </Grid>
     )
 };
 

@@ -1,20 +1,23 @@
-import {do_post} from './request.jsx'
-
 import React from 'react';
 
-import Container from 'react-bootstrap/Container'
-import Button from 'react-bootstrap/Button'
-import Form from 'react-bootstrap/Form';
-import Alert from 'react-bootstrap/Alert';
-
+import {do_post} from './request.jsx'
 import {UserContext} from './App';
 
-function AuthForm(props) {
+import {
+    Avatar, Box, Button, Checkbox, Container, CssBaseline,
+    FormControlLabel, Grid, Switch, TextField
+} from '@mui/material'
+
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+const theme = createTheme();
+
+export default function AuthForm(props) {
     // Signin modal window and controls
-    const {getUser} = React.useContext(UserContext)
-    const formRef   = React.useRef(null);
-    const signIn    = props.signIn;
-    const setSignIn = props.setSignIn;
+    const {getUser}     = React.useContext(UserContext)
+    const formRef       = React.useRef(null);
+    const signIn        = props.signIn;
+    const setSignIn     = props.setSignIn;
+    const setSignInShow = props.setsigninshow;
     const [username,  setUsername]  = React.useState('')
     const [password,  setPassword]  = React.useState('')
     const [confirm,   setConfirm]   = React.useState('')
@@ -22,10 +25,18 @@ function AuthForm(props) {
     const [validated, setValidated] = React.useState(false)
     const [alerted,   setAlerted]   = React.useState('')
     
-    const valid_username = () => !!username
-    const valid_password = () => password.length>=5
-    const valid_confirm  = () => !!confirm && confirm==password
-    const valid = () => valid_username() && valid_password() && valid_confirm()
+    const username_err = () => (
+        !username && 'User Name is Required'
+    )
+    const password_err = () => (
+        password.length<5 && 'Password of at Least 5 Characters Required'
+    )
+    const confirm_err  = () => (
+        !signIn && (!confirm || confirm!=password) && 'Passwords Must Match'
+    )
+    const valid = () => !(
+        username_err() || password_err() || confirm_err()
+    )
 
     const submit = e => {
         e.preventDefault()
@@ -33,8 +44,8 @@ function AuthForm(props) {
         if (!valid()) {
             setAlerted("Invalid username or password")
         }
-        else {do_post(
-                {
+        else {
+            do_post({
                     'username':username,
                     'password':password,
                     'remember':remember
@@ -43,7 +54,7 @@ function AuthForm(props) {
             ).then(data => {
                 if (data.status == 'SUCCESS') {
                     getUser();
-                    props.children.onSignIn();
+                    setSignInShow(false)
                 } else {
                     setAlerted(data.message)
                 }
@@ -52,73 +63,81 @@ function AuthForm(props) {
     }
 
     return (
-        <Container>
-        <Alert show={!!alerted} variant="danger" onClick={() => setAlerted('')}>
-            <Alert.Heading>Error:</Alert.Heading>
-            <p> {alerted} </p>
-        </Alert>
-        <Form ref={formRef} id="signin" noValidate onSubmit={submit}>
-            
-            <Form.Group controlId="username" className="mb-3">
-                <Form.Control
-                    type         = "text"
-                    onChange     = {({target:{value}}) => setUsername(value)}
-                    isInvalid    = {validated&&!valid_username()}
-                    isValid      = {validated&& valid_username()}
-                    placeholder  = "User Name"
-                    autoComplete = "username"
-                />
-                <Form.Control.Feedback type="invalid">
-                    User Name Required
-                </Form.Control.Feedback>
-            </Form.Group>
-
-            <Form.Group controlId="password" className="mb-3">
-                <Form.Control
-                    type         = "password"
-                    onChange     = {({target:{value}}) => setPassword(value)}
-                    isInvalid    = {validated&&!valid_password()}
-                    isValid      = {validated&& valid_password}
-                    placeholder  = "Password (at least 5 Characters)"
-                    autoComplete = "current-password"
-                />
-                <Form.Control.Feedback type="invalid">
-                    Password of at Least 5 Characters Required
-                </Form.Control.Feedback>
-            </Form.Group>
-            
-            {(!signIn) &&
-                <Form.Group controlId="confirm" className="mb-3">
-                    <Form.Control
-                        type         = "password"
-                        onChange     = {({target:{value}}) => setConfirm(value)}
-                        isInvalid    = {validated&&!valid_confirm()}
-                        isValid      = {validated&& valid_confirm()}
-                        placeholder  = "Confirm Password"
-                        autoComplete = "current-password"
-                    />
-                    <Form.Control.Feedback type="invalid">
-                        Passwords Must Match
-                    </Form.Control.Feedback>
-                </Form.Group>
-            }
-
-            <Form.Group controlId="remember" className="mb-4">
-                <Form.Check
-                    label    = "Remember me"
-                    type     = "switch"
-                    checked  = {remember}
-                    onChange = {({target:{checked}}) => setRemember(checked)}
-                />
-            </Form.Group>
-            <div className="d-grid">
-                <Button variant="primary" type="submit">
-                    {(signIn) ? "Sign In" : "Sign Up"}
-                </Button>
-            </div>
-        </Form>
-        </Container>
+    <ThemeProvider theme={theme}>
+    <Container component="main">
+    <CssBaseline />
+    <Box
+        component="form"
+        noValidate
+        onSubmit={submit}
+    >
+    <Grid container spacing={2}>
+        <Grid item xs={6} md={12}>
+            <TextField
+                required
+                fullWidth
+                id="username"
+                label="User Name"
+                name="username"
+                autoComplete="username"
+                onChange={({target:{value}}) => setUsername(value)}
+                error={validated && username_err()}
+                helperText={validated?username_err():'*Required'}
+            />
+        </Grid>
+        <Grid item xs={6} md={12}>
+            <TextField
+                required
+                fullWidth
+                name="password"
+                label="Password"
+                type="password"
+                id="password"
+                autoComplete={signIn?'current-password':"new-password"}
+                onChange={({target:{value}}) => setPassword(value)}
+                error={validated && password_err()}
+                helperText={validated?password_err():'*Required'}
+            />
+        </Grid>
+        {(!signIn) &&
+        <Grid item xs={12}>
+            <TextField
+                required
+                fullWidth
+                name="confirm"
+                label="Confirm Password"
+                type="password"
+                id="confirm"
+                autoComplete="new-password"
+                onChange={({target:{value}}) => setConfirm(value)}
+                error={validated && confirm_err()}
+                helperText={validated?confirm_err():'*Required'}
+            />
+        </Grid>
+        }
+        <Grid item xs={6} md={6}>
+            <FormControlLabel
+                control={<Switch 
+                    color={signIn?'primary':'secondary'}
+                    checked={remember}
+                    onChange={({target:{checked}}) =>   setRemember(checked)}
+                />}
+                label="Remember Me"
+            />
+        </Grid>
+        <Button
+            type="submit"
+            fullWidth
+            variant="contained"
+            sx={{
+                bgcolor:signIn?'primary.main':'secondary.main' 
+            }}
+        >
+            {signIn?"Sign In":"Sign Up"}
+        </Button>
+    </Grid>
+    </Box>
+    </Container>
+    </ThemeProvider>
     );
 }
-
-export default AuthForm

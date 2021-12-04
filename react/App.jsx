@@ -6,15 +6,14 @@ import React from 'react';
 import Auth from './auth';
 import Message from './message';
 
-// React-Bootstrap Imports
-import Card from 'react-bootstrap/Card';
-import Button from 'react-bootstrap/Button';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+import {
+    Button, CardActions, CardContent,
+    CardHeader, Grid, Paper, Typography 
+} from '@mui/material'
 
-// Base app
+// Global User context
 const UserContext = React.createContext();
+
 const App = () => {
     // Local reactive variables
     const [user, setUser] = React.useState({
@@ -41,30 +40,42 @@ const App = () => {
     );
 
     return (
-        <UserContext.Provider value={{user, setUser, getUser}}>
-        <Container><Row><Col>
-        <Card className="text-center">
-            <Card.Header>
-            React+Flask Full Deploy
-            </Card.Header>
-            <Card.Body>
-                <Card.Title>
+    <UserContext.Provider value={{user, setUser, getUser}}>
+    <Paper elevation={24} sx={{margin:'2.5%', textAlign:'center'}}>
+        <CardHeader
+            sx={{text:'center'}}
+            title={<Typography component='h1' variant='h4'>
+                    React+Flask Full Deploy
+                </Typography>
+            }
+        />
+        <CardContent>
+            <Grid container spacing={2}>
+            <Grid item xs={12}>
+                <Typography component='h1' variant='h5'>
                 {(!user.username) && 
-                    <>React⚛️+Vite⚡+Replit🌀=Good👍</>
+                <Grid item xs={12}>
+                React⚛️ + Vite⚡ + Replit🌀 = Good👍
+                </Grid>
                 } {(!!user.username) && 
-                    <>React⚛️+Vite⚡+Flask🧪+Auth🔐+MongoDB🍃+Replit🌀=Awesome🤯</>
+                <Grid item xs={12}>
+                React⚛️ + Vite⚡ + Flask🧪 + Auth🔐 + MongoDB🍃 + Replit🌀 = Awesome🤯
+                </Grid>
                 }
-                </Card.Title>
-                <Card.Text>
-                    <Message/>
-                </Card.Text>
+                </Typography>
+            </Grid>
+            <Grid item xs={12}>
+                <Message/>
+            </Grid>
+            <Grid item xs={12}>
                 <Auth />
-            </Card.Body>
-        </Card>
-        </Col></Row></Container>
-        </UserContext.Provider>
-        )
-
+            </Grid>
+            
+            </Grid>
+        </CardContent>
+    </Paper>
+    </UserContext.Provider>
+    )
 };
 
 // Used in child object (greeting) demonstrating context
