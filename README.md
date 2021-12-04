@@ -30,6 +30,9 @@ From: `run="bash development.sh"`
 To: `run="bash production.sh"`
 
 ### Deployment
+Deployment tested on linode.com. I don't work for them, but they're developer owned and not a bookstore. Provision an Ubuntu LTS (Long-Term Support) node, ssh into the node, and run the following commands from root:
+`git clone https://github.com/parry-do/React-Flask.git`
+`bash React-Flask/configure.sh`
 
 sudo nano /etc/config.json
 {
