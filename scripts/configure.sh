@@ -31,18 +31,13 @@ folder=$(echo "$1" | cut -d "/" -f 5 | cut -d "." -f 1)
 cd /home/$folder
 # poetry installed and initialized
 curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
-poetry add flask-login Flask-PyMongo Authlib
-poetry remove replit
-poetry install
+poetry install --no-dev
 
 # nodejs and modules installed
 sudo apt install -y nodejs
 sudo apt install -y npm
 npm install
 npm run-script build
-
-# gunicorn installed TODO: is this needed?
-pip3 install gunicorn
 
 # supervisor installed and configured
 sudo apt install -y supervisor
@@ -91,6 +86,11 @@ sudo certbot --nginx
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 9DA31620334BD75D9DCB49F368818C72E52529D4
 echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/4.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.0.list
 sudo apt-get updatesudo apt-get install mongodb-org
-# TODO: configure mongo.conf
+# TODO: configure mongo.conf and role-based access control
+sudo systemctl enable mongod
 sudo systemctl start mongod
-# TODO: add to supervisor
+
+# Environment variables setup
+python -c "import os;os.environ['MODE']='deployment'"
+python -c "import os,secret;os.environ['SECRET_KEY']=secret.token_urlsafe(16)"
+
