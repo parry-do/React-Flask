@@ -1,20 +1,19 @@
 #!/bin/bash
 cd ..
 echo "Updating apt"
-apt -qq update > /dev/null
-apt -qq upgrade > /dev/null
+apt -qq -y update 2> /dev/null > /dev/null
+apt -qq -y upgrade 2> /dev/null > /dev/null
 
 # nginx installed and configured
 echo "Installing and configuring nginx"
-ip=$(ip addr | grep inet | grep global | cut -d "/" -f 1 | cut -d "t" -f 2)
-sudo apt install -qq nginx  > /dev/null
-nginx_config="server {
-	listen 80;
+ip=$(ip addr | grep eth0 | grep global | cut -d "/" -f 1 | cut -d "t" -f 2)
+sudo apt install -qq -y nginx 2> /dev/null > /dev/null
+nginx_config="server {listen 80;
 	server_name$ip;
 location / {
 		proxy_pass http://127.0.0.1:8000;
 		proxy_set_header Host \$host;
-		proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+		proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
 	}
 }"
 echo "$nginx_config" > /etc/nginx/sites-enabled/main
@@ -23,7 +22,7 @@ sudo nginx -s reload
 
 # python3 installed
 echo "Installing python3" 
-sudo apt install -qq python3 python3-pip > /dev/null
+sudo apt install -qq -y python3 python3-pip 2> /dev/null > /dev/null
 
 # poetry installed and initialized
 echo "Installing poetry"
@@ -34,8 +33,8 @@ poetry install -q --no-dev
 
 # nodejs and modules installed
 echo "Installing nodejs and npm"
-sudo apt install -qq nodejs  > /dev/null
-sudo apt install -qq npm > /dev/null
+sudo apt install -qq -y nodejs 2> /dev/null > /dev/null
+sudo apt install -qq -y npm 2> /dev/null > /dev/null
 echo "Installing javascript dependencies"
 npm install ~/React-Flask
 echo "Building static React resources"
@@ -44,7 +43,7 @@ npm run-script build
 # HTTPS is setup
 echo "Setting up HTTPS"
 # Pattern from: linode.com/docs/guides/enabling-https-using-certbot-with-nginx-on-ubuntu
-sudo apt install -qq ufw > /dev/null
+sudo apt install -qq -y ufw 2> /dev/null > /dev/null
 sudo ufw allow ssh
 sudo ufw allow http
 sudo ufw allow https
@@ -63,8 +62,8 @@ sudo certbot --nginx
 echo "Mongodb is installed and configured"
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 9DA31620334BD75D9DCB49F368818C72E52529D4
 echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/4.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.0.list
-sudo apt-get -qq update > /dev/null
-sudo apt-get install -qq mongodb-org > /dev/null
+sudo apt-get -qq -y update 2> /dev/null > /dev/null
+sudo apt-get install -qq -y mongodb-org 2> /dev/null > /dev/null
 # TODO: configure mongo.conf and role-based access control
 sudo systemctl enable mongod
 sudo systemctl start mongod
@@ -74,7 +73,7 @@ python -c "import os;os.environ['MODE']='deployment'"
 python -c "import os,secret;os.environ['SECRET_KEY']=secret.token_urlsafe(16)"
 
 # supervisor installed and configured
-sudo apt install -qq supervisor > /dev/null
+sudo apt install -qq -y supervisor 2> /dev/null > /dev/null
 
 # Logging directories
 sudo mkdir /var/log/main
