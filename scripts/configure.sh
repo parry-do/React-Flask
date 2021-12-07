@@ -35,21 +35,14 @@ echo "    poetry is installing dependencies (somewhat slow)"
 
 # nodejs and modules installed
 echo "Installing nodejs and npm"
-sudo apt install -qq -y nodejs 2> /dev/null > /dev/null
-sudo apt install -qq -y npm 2> /dev/null > /dev/null
+mkdir ~/.nvm[ # Seems like a typo?
+curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
+source ~/.profile
+sudo nvm install node --latest-npm --silent --no-progress
+# sudo apt install -qq -y npm 2> /dev/null > /dev/null
 echo "Installing javascript dependencies"
-npm install ~/React-Flask
-$('{
-  "name": "ReactFlask",
-  "version": "0.0.1",
-  "scripts": {
-    "dev":    "vite",
-    "build":  "vite build",
-    "serve":  "vite preview"
-  },
-  "dependencies": {
-  }
-}') > ~/React-Flask/package.json
+cp ~/React-Flask/scripts/package.json ~/React-Flask/package.json
+cd ~/React-Flask
 npm install ~/React-Flask/ react react-dom vite @vitejs/plugin-react-refresh @mui/material @mui/icons-material @emotion/react @emotion/styled
 echo "Building static React resources"
 npm run-script --prefix ~/React-Flask/ build
