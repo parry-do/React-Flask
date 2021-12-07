@@ -2,12 +2,13 @@
 cd ..
 echo "Updating apt"
 apt -qq -y update 2> /dev/null > /dev/null
+echo "Upgrading system (this will take a while)"
 apt -qq -y upgrade 2> /dev/null > /dev/null
 
 # nginx installed and configured
 echo "Installing and configuring nginx"
-ip=$(ip addr | grep eth0 | grep global | cut -d "/" -f 1 | cut -d "t" -f 2)
 sudo apt install -qq -y nginx 2> /dev/null > /dev/null
+ip=$(ip addr | grep eth0 | grep global | cut -d "/" -f 1 | cut -d "t" -f 2)
 nginx_config="server {listen 80;
 	server_name$ip;
 location / {
@@ -26,10 +27,11 @@ sudo apt install -qq -y python3 python3-pip 2> /dev/null > /dev/null
 
 # poetry installed and initialized
 echo "Installing poetry"
-curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python -
+curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python3 -
 cd ~/React-Flask
-echo "poetry is installing dependencies"
-poetry install -q --no-dev
+echo "    poetry is installing dependencies (somewhat slow)"
+# Addition to path won't be effective in this bash instance yet
+~/.poetry/bin/poetry install -q --no-dev
 
 # nodejs and modules installed
 echo "Installing nodejs and npm"
@@ -37,8 +39,20 @@ sudo apt install -qq -y nodejs 2> /dev/null > /dev/null
 sudo apt install -qq -y npm 2> /dev/null > /dev/null
 echo "Installing javascript dependencies"
 npm install ~/React-Flask
+$('{
+  "name": "ReactFlask",
+  "version": "0.0.1",
+  "scripts": {
+    "dev":    "vite",
+    "build":  "vite build",
+    "serve":  "vite preview"
+  },
+  "dependencies": {
+  }
+}') > ~/React-Flask/package.json
+npm install ~/React-Flask/ react react-dom vite @vitejs/plugin-react-refresh @mui/material @mui/icons-material @emotion/react @emotion/styled
 echo "Building static React resources"
-npm run-script build
+npm run-script --prefix ~/React-Flask/ build
 
 # HTTPS is setup
 echo "Setting up HTTPS"
@@ -59,7 +73,7 @@ sudo certbot --nginx
 
 # Prepare MongoDB
 # Pattern from: https://www.linode.com/docs/guides/install-mongodb-on-ubuntu-16-04/
-echo "Mongodb is installed and configured"
+echo "Installing and configuring Mongodb"
 sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 9DA31620334BD75D9DCB49F368818C72E52529D4
 echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu xenial/mongodb-org/4.0 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-4.0.list
 sudo apt-get -qq -y update 2> /dev/null > /dev/null
@@ -69,10 +83,12 @@ sudo systemctl enable mongod
 sudo systemctl start mongod
 
 # Environment variables setup
+echo "Setting up environment variables: MODE and SECRET_KEY"
 python -c "import os;os.environ['MODE']='deployment'"
 python -c "import os,secret;os.environ['SECRET_KEY']=secret.token_urlsafe(16)"
 
 # supervisor installed and configured
+echo "Installing and configuring supervisor"
 sudo apt install -qq -y supervisor 2> /dev/null > /dev/null
 
 # Logging directories

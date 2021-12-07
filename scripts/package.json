@@ -1,0 +1,11 @@
+{
+  "name": "ReactFlask",
+  "version": "0.0.1",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "serve": "vite preview"
+  },
+  "dependencies": {
+  }
+}
