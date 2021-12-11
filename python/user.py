@@ -8,6 +8,7 @@ def make_user_class(db):
     "Creates the User class per db provided"
 
     class User(Document, UserMixin):
+        meta = {'collection': 'user'}
         username = fields.StringField(
             required=True,
             unique=True,

@@ -18,19 +18,29 @@ def connect(app):
         if os.environ.get(key):
             app.config[key] = os.environ.get(key)
         else:
-            with open('flask.config.json') as config_file:
-                app.config[key] = json.load(config_file).get(key, default)
+            with open('options.json') as config_file:
+                app.config[key] = json.load(config_file).get(
+                    key, default
+                )
 
     get_key('SECRET_KEY', 'KEEPITSECRETkeepitsafe')
     get_key('COOKIE_LIFESPAN', {'months': 12})
 
     mode = os.environ.get('MODE')
     if mode is None:
+        mode == 'deployment'
+    if mode=='deployment':
         # Deployment server, actual mongo db
-        mode = 'deployment'
-        # TODO: get this figured out
         db = mongoengine
-        db.connect("test", host="mydatabase", port=27017)
+
+        db.connect(
+            "flaskdb",
+            username = get_key('MONGODB_USERNAME'),
+            password = get_key('MONGODB_PASSWORD'),
+            host     = 'mongodb',
+            port     = 27017,
+            db       = 'flaskdb',
+        )
     else:
         # Replit prod/dev, db by mongomock
         db = mongoengine
@@ -65,6 +75,14 @@ def connect(app):
         print('*' * 10, 'Creating Dummy Database', '*' * 10)
         User(username='admin', password='admin').save()
         User(username='user', password='useruser').save()
+    else:
+        with open('scripts/options.json', 'r') as f:
+            options = json.load(f)
+        # admin user is created from options
+        User(
+            username=options['ADMIN_USERNAME'],
+            password=options['ADMIN_PASSWORD'],
+        ).save()
 
     class Global(mongoengine.Document):
         name  = mongoengine.fields.StringField(unique=True)

@@ -1,0 +1,15 @@
+{
+    "FIRST_NAME"                 : "Firsty",
+    "LAST_NAME"                  : "McName",
+    "EMAIL"                      : "user@domain.com",
+    "COOKIE_LIFESPAN"            : {
+        "months": 24
+    },
+    "ADMIN_USERNAME"             : "admin",
+    "ADMIN_PASSWORD"             : "theyllneverguessthis",
+    "MONGODB_USERNAME"           : "mongo",
+    "MONGODB_PASSWORD"           : "mongo",
+    "MONGO_INITDB_ROOT_USERNAME" : "mongo", 
+    "MONGO_INITDB_ROOT_PASSWORD" : "mongo"
+}
+

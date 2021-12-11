@@ -16,7 +16,7 @@ from python.db import connect
 ###################################################
 # Server mode
 mode = os.environ.get('MODE')
-if mode is None or mode=='deployment:
+if mode is None or mode=='deployment':
     # Deployment server, statics by reverse proxy
     mode = 'deployment'
     app = Flask(__name__)
@@ -201,5 +201,5 @@ if __name__ == '__main__':
         # Replit development mode
         app.run(host='0.0.0.0', port=8080, debug=True)
     else:
-        # Possible replit production mode
+        # Production or deployment mode
         app.run(host='0.0.0.0', port=8080)

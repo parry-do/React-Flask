@@ -1,4 +1,8 @@
 #!/bin/bash
+pip install docker werkzeug
+sudo python configure.py
+
+
 cd ..
 echo "Updating apt"
 apt -qq -y update 2> /dev/null > /dev/null
@@ -38,8 +42,8 @@ echo "Installing nodejs and npm"
 mkdir ~/.nvm[ # Seems like a typo?
 curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
 source ~/.profile
+sudo apt install -qq -y npm 2> /dev/null > /dev/null
 sudo nvm install node --latest-npm --silent --no-progress
-# sudo apt install -qq -y npm 2> /dev/null > /dev/null
 echo "Installing javascript dependencies"
 cp ~/React-Flask/scripts/package.json ~/React-Flask/package.json
 cd ~/React-Flask
@@ -77,8 +81,8 @@ sudo systemctl start mongod
 
 # Environment variables setup
 echo "Setting up environment variables: MODE and SECRET_KEY"
-python -c "import os;os.environ['MODE']='deployment'"
-python -c "import os,secret;os.environ['SECRET_KEY']=secret.token_urlsafe(16)"
+python3 -c "import os;os.environ['MODE']='deployment'"
+python3 -c "import os,secret;os.environ['SECRET_KEY']=secret.token_urlsafe(16)"
 
 # supervisor installed and configured
 echo "Installing and configuring supervisor"
