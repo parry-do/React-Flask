@@ -1,4 +1,4 @@
-FROM nikolaik/python3.8-nodejs14-alpine
+FROM nikolaik/python-nodejs:python3.8-nodejs14-alpine
 
 LABEL MAINTAINER="{FIRST_NAME} {LAST_NAME} <{EMAIL}>"
 
