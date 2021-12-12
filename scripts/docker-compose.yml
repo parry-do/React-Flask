@@ -21,6 +21,14 @@ services:
     volumes:
       - appdata:{APP_DATA}
       - ./options.js:{BASE_DIR}/scripts/options.js
+      - ./vite-config.js:{BASE_DIR}/vite-config.js
+      - ./package.js:{BASE_DIR}/package.js
+      - ./index.html:{BASE_DIR}/index.html
+      - ./react/:{BASE_DIR}/react/
+      - ./pyproject.toml:{BASE_DIR}/pyproject.toml
+      - ./main.py:{BASE_DIR}/main.py
+      - ./python/:{BASE_DIR}/python/
+      
     depends_on:
       - mongodb
     networks:

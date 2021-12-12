@@ -1,4 +1,4 @@
-FROM python:3.6-alpine
+FROM nikolaik/python-nodejs
 
 LABEL MAINTAINER="{FIRST_NAME} {LAST_NAME} <{EMAIL}>"
 
@@ -10,8 +10,10 @@ ENV GROUP_ID=1000 \
 WORKDIR {BASE_DIR}
 
 ADD . {APP_DATA}
+RUN apk update && apk add gcc libc-dev libffi-dev openssl-dev python3-dev
 RUN pip install 'poetry==1.1.6'
 RUN poetry install
+RUN npm run-script build
 
 RUN addgroup -g $GROUP_ID www
 RUN adduser -D -u $USER_ID -G www www -s /bin/sh

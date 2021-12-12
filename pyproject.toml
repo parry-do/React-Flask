@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "repl_React_Flask_Full_Deploy-Template"
+name = "React_Flask_Full_Deploy-Template"
 version = "0.1.0"
 description = "React+Flask Full Deploy"
 authors = ["Matthew Parry parry.do@gmail.com"]
