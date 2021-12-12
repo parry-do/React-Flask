@@ -111,7 +111,7 @@ subprocessicate(
 )
 
 subprocessicate(
-    ["sudo" "systemctl" "enable" "docker"],
+    ["sudo", "systemctl", "enable", "docker"],
     "Setting Docker To Start on Startup"
 )
 
