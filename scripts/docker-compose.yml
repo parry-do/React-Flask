@@ -20,7 +20,7 @@ services:
       MONGODB_HOSTNAME: mongodb
     volumes:
       - appdata:{APP_DATA}
-      - ./options.js:{APP_DATA}
+      - ./options.js:{BASE_DIR}/scripts/options.js
     depends_on:
       - mongodb
     networks:
