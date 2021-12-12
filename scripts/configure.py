@@ -56,12 +56,12 @@ for path in ['app', 'nginx']:
 
 # Mongo init file is created with correct options
 init_file = """db.createUser({
-    user: '{MONGODB_USERNAME}',
-    pwd: '{MONGODB_PASSWORD}',
-    roles: [
+    'user' : '{MONGODB_USERNAME}',
+    'pwd'  : '{MONGODB_PASSWORD}',
+    'roles': [
         {
-            role: 'readWrite',
-            db: 'flaskdb',
+            'role' : 'readWrite',
+            'db'   : 'flaskdb',
         },
     ],
 });
