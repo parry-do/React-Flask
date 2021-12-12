@@ -7,9 +7,8 @@ ENV GROUP_ID=1000 \
     MODE='deployment' \
     SECRET_KEY={SECRET_KEY}
 
-WORKDIR {BASE_DIR}
+WORKDIR /var/www/
 
-ADD . {APP_DATA}
 RUN apk update && apk add gcc libc-dev libffi-dev openssl-dev python3-dev
 RUN pip install 'poetry==1.1.6'
 RUN poetry install

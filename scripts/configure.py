@@ -37,9 +37,9 @@ chars = string.ascii_letters + string.digits
 options.update({
     'SECRET_KEY' : ''.join(random.sample(chars,32)),
     'BASE_DIR'   : BASE_DIR,
-    'DB_DATA'    : join(BASE_DIR, 'docker', 'db'),
-    'NGINX_DATA' : join(BASE_DIR, 'docker', 'nginx'),
-    'APP_DATA'   : join(BASE_DIR, 'docker', 'app'),
+    'DB_DIR'    : join(BASE_DIR, 'docker', 'db'),
+    'NGINX_DIR' : join(BASE_DIR, 'docker', 'nginx'),
+    'APP_DIR'   : join(BASE_DIR, 'docker', 'app'),
     'CPUS'       : 2* multiprocessing.cpu_count() + 1,
 })
 
@@ -84,6 +84,21 @@ shutil.copy(
     join(BASE_DIR, 'scripts', 'main.conf'),
     join(BASE_DIR, 'docker', 'nginx', 'conf.d'),
 )
+
+# app files are copied
+targets = [
+    'python', 'react', 'main.py', 'index.html',
+    'vite.config.js', 'package.json', 'pyproject.toml'
+]
+for target in targets:
+    shutil.copy(
+        join(BASE_DIR, target),
+        join(BASE_DIR, 'docker', 'app', target),
+    )
+shutil.copy(
+        join(BASE_DIR, 'scripts', 'options.json'),
+        join(BASE_DIR, 'docker', 'app', 'options.json'),
+    )
 
 ##############################################
 # Docker implemented

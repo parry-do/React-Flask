@@ -19,15 +19,7 @@ services:
       MONGODB_PASSWORD: {MONGODB_PASSWORD}
       MONGODB_HOSTNAME: mongodb
     volumes:
-      - appdata:{APP_DATA}
-      - ./options.js:{BASE_DIR}/scripts/options.js
-      - ./vite-config.js:{BASE_DIR}/vite-config.js
-      - ./package.js:{BASE_DIR}/package.js
-      - ./index.html:{BASE_DIR}/index.html
-      - ./react/:{BASE_DIR}/react/
-      - ./pyproject.toml:{BASE_DIR}/pyproject.toml
-      - ./main.py:{BASE_DIR}/main.py
-      - ./python/:{BASE_DIR}/python/
+      - {APP_DIR}:/var/www/
       
     depends_on:
       - mongodb
@@ -47,8 +39,8 @@ services:
       MONGODB_DATA_DIR: {DB_DATA}
       MONDODB_LOG_DIR: /dev/null
     volumes:
-      - mongodbdata:{DB_DATA}
-      - ./mongo-init.js:{DB_DATA}/mongo-init.js
+      - {DB_DIR}:/db/data/
+      - {BASE_DIR}/mongo-init.js:./mongo-init.js
     networks:
       - backend
 
@@ -68,7 +60,7 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - nginxdata:{NGINX_DATA}
+      - {NGINX_DIR}:/var/log/nginx
     depends_on:
       - flask
     networks:
