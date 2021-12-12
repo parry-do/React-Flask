@@ -106,12 +106,12 @@ def subprocessicate(command, comment="Initiating"):
             monitor(timeout+e.timeout)
 
 subprocessicate(
-    "docker-compose up -d",
+    ["docker-compose", "up", "-d"],
     "Creating Docker Containers",
 )
 
 subprocessicate(
-    "sudo systemctl enable docker",
+    ["sudo" "systemctl" "enable" "docker"],
     "Setting Docker To Start on Startup"
 )
 

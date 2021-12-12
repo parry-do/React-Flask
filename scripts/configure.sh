@@ -13,4 +13,4 @@ apt -qq -y install docker.io 2> /dev/null > /dev/null
 apt -qq -y install docker-compose 2> /dev/null > /dev/null
 
 echo "Building docker files and docker images"
-python3 configure.py
+python3 ~/React-Flask/scripts/configure.py

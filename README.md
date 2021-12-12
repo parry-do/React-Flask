@@ -30,11 +30,13 @@ From: `run="bash development.sh"`
 To: `run="bash production.sh"`
 
 ### Deployment
-Deployment tested on linode.com. I don't work for them, but they're developer owned and not a bookstore. Provision an Ubuntu LTS (Long-Term Support) node, ssh into the node, and run the following commands from root:
+Deployment tested on linode.com. I don't work for them, but they're developer owned and not a bookstore. Provision an Ubuntu LTS (Long-Term Support) node, ssh in, and run as root:
 
 `git clone https://github.com/parry-do/React-Flask.git`
 
 `bash React-Flask/scripts/configure.sh`
+
+Then the directory name can be changed from React-Flask if you choose.
 
 ### Next
 This isn't ready for use in the real world. Recaptcha protections, OAuth signins, and continuous integration are just a few other features to add next. This builds the backbone for a great webapp.
