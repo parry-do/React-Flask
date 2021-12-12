@@ -1,6 +1,7 @@
 import os
 from os.path import split, join
 import shutil
+from distutils.dir_util import copy_tree
 import string
 import random
 import json
@@ -87,11 +88,19 @@ shutil.copy(
 
 # app files are copied
 targets = [
-    'python', 'react', 'main.py', 'index.html',
-    'vite.config.js', 'package.json', 'pyproject.toml'
+    'main.py', 'index.html', 'vite.config.js',
+    'package.json', 'pyproject.toml',
 ]
 for target in targets:
     shutil.copy(
+        join(BASE_DIR, target),
+        join(BASE_DIR, 'docker', 'app', target),
+    )
+targets = [
+    'python', 'react',
+]
+for target in targets:
+    copy_tree(
         join(BASE_DIR, target),
         join(BASE_DIR, 'docker', 'app', target),
     )
