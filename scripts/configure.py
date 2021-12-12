@@ -52,6 +52,13 @@ for path in ['app', 'nginx']:
         ),'w') as w:
             w.write(f.read().format(**options))
 
+# Docker-compose file is created with correct options
+with open(join(BASE_DIR,'scripts','docker-compose.yml'),'r') as f:
+    with open(
+        join(BASE_DIR,'docker','docker-compose.yml'),'w'
+    ) as w:
+        w.write(f.read().format(**options))
+
 # Mongo init file is created with correct options
 init_file = """db.createUser({{
     'user' : '{MONGODB_USERNAME}',
@@ -76,12 +83,6 @@ os.mkdir(join(BASE_DIR, 'docker', 'nginx', 'conf.d'))
 shutil.copy(
     join(BASE_DIR, 'scripts', 'main.conf'),
     join(BASE_DIR, 'docker', 'nginx', 'conf.d'),
-)
-
-# docker-compose.yaml is copied
-shutil.copy(
-    join(BASE_DIR, 'scripts', 'docker-compose.yaml'),
-    join(BASE_DIR, 'docker'),
 )
 
 ##############################################
