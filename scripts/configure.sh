@@ -1,6 +1,12 @@
 #!/bin/bash
-pip install docker werkzeug
-sudo python configure.py
+echo "Updating apt"
+apt -qq -y update 2> /dev/null > /dev/null
+echo "Installing python3"
+apt -qq -y install python3 2> /dev/null > /dev/null
+echo "Upgrading system (this will take a while)"
+apt -qq -y upgrade 2> /dev/null > /dev/null
+
+sudo python3 -m configure.py
 
 
 cd ..

@@ -31,9 +31,7 @@ for path in [[], ['db'], ['nginx'], ['app']]:
 
 # The options dictionary is created
 with open('scripts/options.json', 'r') as f:
-    print("Opened the json file")
     options = json.load(f)
-    print(options)
 import multiprocessing
 chars = string.ascii_letters + string.digits
 options.update({
@@ -55,7 +53,7 @@ for path in ['app', 'nginx']:
             w.write(f.read().format(**options))
 
 # Mongo init file is created with correct options
-init_file = """db.createUser({
+init_file = """db.createUser({{
     'user' : '{MONGODB_USERNAME}',
     'pwd'  : '{MONGODB_PASSWORD}',
     'roles': [
@@ -64,7 +62,7 @@ init_file = """db.createUser({
             'db'   : 'flaskdb',
         },
     ],
-});
+}});
 """.format(**options)
 
 with open(join(
