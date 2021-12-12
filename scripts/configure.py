@@ -78,6 +78,12 @@ shutil.copy(
     join(BASE_DIR, 'docker', 'nginx', 'conf.d'),
 )
 
+# docker-compose.yaml is copied
+shutil.copy(
+    join(BASE_DIR, 'scripts', 'docker-compose.yaml'),
+    join(BASE_DIR, 'docker'),
+)
+
 ##############################################
 # Docker implemented
 ##############################################
