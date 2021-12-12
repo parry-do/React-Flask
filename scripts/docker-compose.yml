@@ -6,7 +6,7 @@ services:
       context: app
       dockerfile: Dockerfile
     container_name: flask
-    image: nikolaik/python-nodejs
+    image: nikolaik/python3.8-nodejs14-alpine
     restart: unless-stopped
     environment:
       MODE: "deployment"
