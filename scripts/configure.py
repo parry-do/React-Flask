@@ -57,16 +57,16 @@ init_file = """db.createUser({{
     'user' : '{MONGODB_USERNAME}',
     'pwd'  : '{MONGODB_PASSWORD}',
     'roles': [
-        {
+        {{
             'role' : 'readWrite',
             'db'   : 'flaskdb',
-        },
+        }},
     ],
 }});
 """.format(**options)
 
 with open(join(
-    BASE_DIR,'docker','mongo','mongo-init.js'),'w'
+    BASE_DIR,'docker','db','mongo-init.js'),'w'
 ) as w:
     w.write(init_file)
 

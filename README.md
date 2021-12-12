@@ -34,27 +34,13 @@ Deployment tested on linode.com. I don't work for them, but they're developer ow
 
 `git clone https://github.com/parry-do/React-Flask.git`
 
-`bash React-Flask/configure.sh`
-
-sudo nano /etc/config.json
-{
-	"SECRET_KEY": "1A37BbcCJh67",
-	"DATABASE_URI": "sqlite:///site.db"
-}
-
-import json
-with open('/etc/config.json') as config_file:
-    config = json.load(config_file)
-app.config['SECRET_KEY'] = config.get('SECRET_KEY')
-app.config['DATABASE_URI'] = config.get('DATABASE_URI')
-
-bash configure.sh "github clone url"
+`bash React-Flask/scripts/configure.sh`
 
 ### Next
-This isn't ready for use in the real world. Recaptcha protections, OAuth signins, and continuous integration as just a few other features that could be added and require specific tokens. This builds the backbone for a great webapp.
+This isn't ready for use in the real world. Recaptcha protections, OAuth signins, and continuous integration are just a few other features to add next. This builds the backbone for a great webapp.
 
 ### Inspiration
 
 Directly inspired by [a previous React Repl](https://replit.com/@replit/Reactjs).
 
-Deployment implementation patterned from [this article](https://medium.com/@abalarin/flask-on-linode-a6d6ce2505d0).
+Deployment implementation patterned from [this article](https://www.digitalocean.com/community/tutorials/how-to-set-up-flask-with-mongodb-and-docker).
