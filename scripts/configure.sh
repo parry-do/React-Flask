@@ -12,5 +12,13 @@ echo "Installing docker"
 apt -qq -y install docker.io 2> /dev/null > /dev/null
 apt -qq -y install docker-compose 2> /dev/null > /dev/null
 
-echo "Building docker files and docker images"
+echo "Building docker files"
 python3 ~/React-Flask/scripts/configure.py
+
+echo "Building docker images"
+cd ~/React-Flask/docker
+docker-compose up -d
+
+echo "Setting up docker "
+systemctl enable docker.service
+systemctl enable containerd.service
