@@ -18,7 +18,7 @@ def connect(app):
         if os.environ.get(key):
             app.config[key] = os.environ.get(key)
         else:
-            with open('options.json') as config_file:
+            with open('scripts/options.json') as config_file:
                 app.config[key] = json.load(config_file).get(
                     key, default
                 )

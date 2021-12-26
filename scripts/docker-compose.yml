@@ -36,11 +36,11 @@ services:
       MONGO_INITDB_ROOT_USERNAME: {MONGO_INITDB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: {MONGO_INITDB_ROOT_PASSWORD}
       MONGO_INITDB_DATABASE: flaskdb
-      MONGODB_DATA_DIR: {DB_DIR}
+      MONGODB_DATA_DIR: /db/data/
       MONDODB_LOG_DIR: /dev/null
     volumes:
       - {DB_DIR}:/db/data/
-      - {BASE_DIR}/mongo-init.js:./mongo-init.js
+      - {BASE_DIR}/mongo-init.js:/mongo-init.js
     networks:
       - backend
 
