@@ -9,7 +9,7 @@ ENV GROUP_ID=1000 \
 
 RUN mkdir /var/www
 WORKDIR /var/www/
-ADD {APP_DIR} /var/www/
+ADD . /var/www/
 
 RUN apk update && apk add gcc libc-dev libffi-dev openssl-dev python3-dev
 RUN pip install 'poetry==1.1.6'

@@ -44,7 +44,7 @@ options.update({
 })
 
 # Docker files are created with correct options
-for path in ['app', 'nginx']:
+for path in ['app', 'nginx', 'db']:
     name = f'{path}.Dockerfile'
     with open(join(BASE_DIR,'scripts',name),'r') as f:
         with open(join(
