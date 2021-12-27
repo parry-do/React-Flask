@@ -5,7 +5,6 @@ from distutils.dir_util import copy_tree
 import string
 import random
 import json
-import subprocess
 
 ##############################################
 # Establish correct working directories
