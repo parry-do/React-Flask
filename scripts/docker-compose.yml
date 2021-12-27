@@ -19,7 +19,7 @@ services:
       MONGODB_PASSWORD: {MONGODB_PASSWORD}
       MONGODB_HOSTNAME: mongodb
     volumes:
-      - {APP_DIR}:/var/www/
+      - appdata:/var/www
       
     depends_on:
       - mongodb
@@ -36,10 +36,10 @@ services:
       MONGO_INITDB_ROOT_USERNAME: {MONGO_INITDB_ROOT_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: {MONGO_INITDB_ROOT_PASSWORD}
       MONGO_INITDB_DATABASE: flaskdb
-      MONGODB_DATA_DIR: /db/data/
+      MONGODB_DATA_DIR: /db/data
       MONDODB_LOG_DIR: /dev/null
     volumes:
-      - {DB_DIR}:/db/data/
+      - mongodbdata:/db/data
       - {BASE_DIR}/mongo-init.js:/mongo-init.js
     networks:
       - backend
@@ -60,7 +60,7 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - {NGINX_DIR}:/var/log/nginx
+      - nginxdata:/var/log/nginx
     depends_on:
       - flask
     networks:
@@ -73,9 +73,23 @@ networks:
     driver: bridge
 
 volumes:
-  mongodbdata:
-    driver: local
   appdata:
     driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '{APP_DIR}'
+  
+  mongodbdata:
+    driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '{DB_DIR}'
+  
   nginxdata:
     driver: local
+    driver_opts:
+      type: 'none'
+      o: 'bind'
+      device: '{NGINX_DIR}'

@@ -7,6 +7,7 @@ ENV GROUP_ID=1000 \
     MODE='deployment' \
     SECRET_KEY={SECRET_KEY}
 
+RUN mkdir /var/www
 WORKDIR /var/www/
 
 RUN apk update && apk add gcc libc-dev libffi-dev openssl-dev python3-dev
