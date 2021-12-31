@@ -95,14 +95,10 @@ for target in targets:
         join(BASE_DIR, 'docker', 'app', target),
     )
 targets = [
-    'python', 'react',
+    'python', 'react', 'scripts',
 ]
 for target in targets:
     copy_tree(
         join(BASE_DIR, target),
         join(BASE_DIR, 'docker', 'app', target),
-    )
-shutil.copy(
-        join(BASE_DIR, 'scripts', 'options.json'),
-        join(BASE_DIR, 'docker', 'app', 'scripts', 'options.json'),
     )
