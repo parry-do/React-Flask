@@ -76,7 +76,14 @@ def connect(app):
         User(username='admin', password='admin').save()
         User(username='user', password='useruser').save()
     else:
-        with open('scripts/options.json', 'r') as f:
+        options_path = os.path.realpath(
+            os.path.join(
+                os.path.dirname(__file__),
+                '..',
+                'scripts',
+            )
+        )
+        with open(options_path, 'r') as f:
             options = json.load(f)
         # admin user is created from options
         User(
