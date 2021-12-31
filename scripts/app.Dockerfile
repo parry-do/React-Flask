@@ -3,7 +3,7 @@ FROM nikolaik/python-nodejs:python3.8-nodejs14-alpine
 LABEL MAINTAINER="{FIRST_NAME} {LAST_NAME} <{EMAIL}>"
 
 ENV GROUP_ID=1337 \
-    USER_ID=1000 \
+    USER_ID=1337 \
     MODE='deployment' \
     SECRET_KEY={SECRET_KEY}
 

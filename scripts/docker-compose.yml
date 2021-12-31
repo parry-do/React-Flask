@@ -42,7 +42,7 @@ services:
       MONDODB_LOG_DIR: /dev/null
     volumes:
       - mongodbdata:/db/data
-      - {BASE_DIR}/mongo-init.js:/mongo-init.js
+      - ./db/init.js:/docker-entrypoint-initdb.d/init.js:ro
     networks:
       - backend
 
