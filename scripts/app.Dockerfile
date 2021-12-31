@@ -11,7 +11,7 @@ ENV GROUP_ID=1337 \
 # Working directory creation
 RUN mkdir /var/www
 WORKDIR /var/www/
-ADD . /var/www/
+ADD ./app /var/www/
 
 # Packages for wheel and poetry installation
 RUN apk update && apk add gcc libc-dev libffi-dev openssl-dev python3-dev
