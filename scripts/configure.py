@@ -77,7 +77,6 @@ with open(join(
 ) as w:
     w.write(init_file)
 
-
 # nginx configuration is copied
 os.mkdir(join(BASE_DIR, 'docker', 'nginx', 'conf.d'))
 shutil.copy(
@@ -105,5 +104,5 @@ for target in targets:
     )
 shutil.copy(
         join(BASE_DIR, 'scripts', 'options.json'),
-        join(BASE_DIR, 'docker', 'app', 'options.json'),
+        join(BASE_DIR, 'docker', 'app', 'scripts', 'options.json'),
     )
