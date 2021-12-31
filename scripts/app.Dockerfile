@@ -16,6 +16,7 @@ RUN pip install 'poetry==1.1.6'
 RUN poetry install
 RUN npm install
 RUN npm run-script build
+RUN pip install gunicorn
 
 RUN addgroup -g $GROUP_ID www
 RUN adduser -D -u $USER_ID -G www www -s /bin/sh
