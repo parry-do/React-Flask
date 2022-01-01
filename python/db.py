@@ -33,13 +33,12 @@ def connect(app):
         # Deployment server, actual mongo db
         db = mongoengine
 
-        db.connect(
-            "flaskdb",
+        db.connect(  # Deployment db server
+            db       = 'flaskdb',
             username = get_key('MONGODB_USERNAME'),
             password = get_key('MONGODB_PASSWORD'),
             host     = 'mongodb',
             port     = 27017,
-            db       = 'flaskdb',
         )
     else:
         # Replit prod/dev, db by mongomock
