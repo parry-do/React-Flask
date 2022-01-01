@@ -37,7 +37,7 @@ def connect(app):
             db       = 'flaskdb',
             username = get_key('MONGODB_USERNAME'),
             password = get_key('MONGODB_PASSWORD'),
-            host     = 'mongodb',
+            host     = 'localhost',
             port     = 27017,
         )
     else:
@@ -80,6 +80,7 @@ def connect(app):
                 os.path.dirname(__file__),
                 '..',
                 'scripts',
+                'options.json',
             )
         )
         with open(options_path, 'r') as f:
