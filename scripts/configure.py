@@ -29,21 +29,25 @@ for path in [[], ['db'], ['nginx'], ['app']]:
 # Files are loaded into /docker
 ##############################################
 
+##############################################
 # The options dictionary is created
-with open('scripts/options.json', 'r') as f:
-    options = json.load(f)
+##############################################
 import multiprocessing
 chars = string.ascii_letters + string.digits
-options.update({
+options = {
     'SECRET_KEY' : ''.join(random.sample(chars,32)),
     'BASE_DIR'   : BASE_DIR,
-    'DB_DIR'    : join(BASE_DIR, 'docker', 'db'),
-    'NGINX_DIR' : join(BASE_DIR, 'docker', 'nginx'),
-    'APP_DIR'   : join(BASE_DIR, 'docker', 'app'),
+    'DB_DIR'     : join(BASE_DIR, 'docker', 'db'),
+    'NGINX_DIR'  : join(BASE_DIR, 'docker', 'nginx'),
+    'APP_DIR'    : join(BASE_DIR, 'docker', 'app'),
     'CPUS'       : 2* multiprocessing.cpu_count() + 1,
-})
+}
+with open('scripts/options.json', 'r') as f:
+    options.update(json.load(f))
 
+###############################################
 # Docker files are created with correct options
+###############################################
 for path in ['app', 'nginx']:
     name = f'{path}.Dockerfile'
     with open(join(BASE_DIR,'scripts',name),'r') as f:
@@ -52,14 +56,18 @@ for path in ['app', 'nginx']:
         ),'w') as w:
             w.write(f.read().format(**options))
 
+#####################################################
 # Docker-compose file is created with correct options
+#####################################################
 with open(join(BASE_DIR,'scripts','docker-compose.yml'),'r') as f:
     with open(
         join(BASE_DIR,'docker','docker-compose.yml'),'w'
     ) as w:
         w.write(f.read().format(**options))
 
+#####################################################
 # Mongo init file is created with correct options
+#####################################################
 init_file = """db.createUser({{
     'user' : '{MONGODB_USERNAME}',
     'pwd'  : '{MONGODB_PASSWORD}',
@@ -77,14 +85,18 @@ with open(join(
 ) as w:
     w.write(init_file)
 
+#####################################################
 # nginx configuration is copied
+#####################################################
 os.mkdir(join(BASE_DIR, 'docker', 'nginx', 'conf.d'))
 shutil.copy(
     join(BASE_DIR, 'scripts', 'main.conf'),
     join(BASE_DIR, 'docker', 'nginx', 'conf.d'),
 )
 
+#####################################################
 # app files are copied
+#####################################################
 targets = [
     'main.py', 'index.html', 'vite.config.js',
     'package.json', 'pyproject.toml',
@@ -102,6 +114,10 @@ for target in targets:
         join(BASE_DIR, target),
         join(BASE_DIR, 'docker', 'app', target),
     )
+
+#####################################################
+# wsgi file is created
+#####################################################
 wsgi_file="""from main import app
 
 if __name__ == "__main__":
