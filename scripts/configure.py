@@ -102,3 +102,12 @@ for target in targets:
         join(BASE_DIR, target),
         join(BASE_DIR, 'docker', 'app', target),
     )
+wsgi_file="""from main import app
+
+if __name__ == "__main__":
+    app.run()
+"""
+with open(join(
+    BASE_DIR,'docker','app','wsgi.py'),'w'
+) as w:
+    w.write(wsgi_file)

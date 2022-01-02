@@ -33,4 +33,4 @@ USER www
 
 EXPOSE 5000
 
-CMD [ "poetry", "run", "gunicorn", "-w", "{CPUS}", "--bind", "0.0.0.0:5000", "main"]
+CMD [ "poetry", "run", "gunicorn", "-w", "{CPUS}", "--bind", "0.0.0.0:5000", "wgsi:app"]
