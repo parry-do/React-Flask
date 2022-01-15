@@ -9,7 +9,7 @@ from flask import (
 
 import flask_login as login
 
-from python.db import connect
+from python.db import connect, User, Global, initialize
 
 ###################################################
 # App Configuration
@@ -25,7 +25,7 @@ else:
     app = Flask(__name__, static_url_path='/dists')
 
 # App services initiation
-db, User, Global, get_user = connect(app)
+db, get_user = connect(app)
 
 ###################################################
 # Login routes
@@ -58,15 +58,11 @@ def signout():
         login.logout_user()
         return {
             'status': 'SUCCESS',
-            'message': {
-                'name': f'Signed out'
-            }
+            'message': {'name': f'Signed out'}
         }
     return {
         'status': 'FAILED',
-        'message': {
-            'name': 'Not signed in'
-        }
+        'message': {'name': 'Not signed in'}
     }
 
 @app.route('/signup', methods=['POST'])
@@ -79,7 +75,7 @@ def signup():
         # User exists
         return {
             'status': 'FAILED',
-            'message': 'User already exists with that user name. Pick another.',
+            'message': 'User name already exists. Pick another.',
         }
 
     user = User(
@@ -118,10 +114,7 @@ def log():
 
     return {
         'status': 'SUCCESS',
-        'message': {
-            'hits': hits,
-            'total': total,
-        },
+        'message': {'hits': hits, 'total': total},
     }
 
 
@@ -139,10 +132,7 @@ def user():
     else:
         return {
             'status': 'FAILED',
-            'message': {
-                'username'  : None,
-                'hits'      : None,
-            }
+            'message': {'username': None, 'hits' : None}
         }
 
 
@@ -160,10 +150,7 @@ if mode == 'development':
         url = request.url.replace(
             request.host_url,
             'http://localhost:3000/',
-        ).replace(
-            '%40',
-            '@',
-        )
+        ).replace('%40','@')
 
         resp = requests.request(
             **{
@@ -193,13 +180,19 @@ else:
     # Deployment. Reverse proxy will handle statics.
     pass
 
+def production():
+    # Replit production mode
+    initialize(db)
+    return app
+
 ###################################################
 # Run as __main__, typically Replit environment
 ###################################################
 if __name__ == '__main__':
     if mode == 'development':
         # Replit development mode
+        initialize(db)
         app.run(host='0.0.0.0', port=8080, debug=True)
     else:
-        # Production or deployment mode
+        # Deployment mode
         app.run(host='0.0.0.0', port=8080)
