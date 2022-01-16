@@ -3,7 +3,7 @@ echo "Updating apt"
 apt -qq -y update 2> /dev/null > /dev/null
 
 echo "Upgrading system (this will take a while)"
-apt -qq -y upgrade 2> /dev/null > /dev/null
+apt -qq -y upgrade
 
 echo "Installing python3 if not already installed"
 apt -qq -y install python3 2> /dev/null > /dev/null
