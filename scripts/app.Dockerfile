@@ -8,6 +8,12 @@ ENV GROUP_ID=1337 \
     MODE='deployment' \
     SECRET_KEY={SECRET_KEY}
 
+# Linux user and group
+RUN addgroup -g $GROUP_ID www
+RUN adduser -D -u $USER_ID -G www www -s /bin/sh
+
+USER www
+
 # Working directory creation
 RUN mkdir /var/www
 WORKDIR /var/www/
@@ -24,12 +30,6 @@ RUN poetry install --no-dev
 # Javascript installation
 RUN npm install
 RUN npm run-script build
-
-# Linux user and group
-RUN addgroup -g $GROUP_ID www
-RUN adduser -D -u $USER_ID -G www www -s /bin/sh
-
-USER www
 
 EXPOSE 5000
 
