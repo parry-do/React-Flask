@@ -22,7 +22,7 @@ if mode is None or mode=='deployment':
     app = Flask(__name__)
 else:
     # Replit prod/dev, statics by Flask
-    app = Flask(__name__, static_url_path='/dists')
+    app = Flask(__name__, static_url_path='/dist')
 
 # App services initiation
 db, get_user = connect(app)

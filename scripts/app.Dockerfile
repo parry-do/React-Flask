@@ -26,10 +26,6 @@ RUN pip install 'poetry==1.1.6'
 RUN poetry config virtualenvs.create false
 RUN poetry install --no-dev
 
-# Javascript installation
-RUN npm install
-RUN npm run-script build
-
 EXPOSE 5000
 USER www
 

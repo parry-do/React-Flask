@@ -19,6 +19,10 @@ echo "Building docker images"
 cd ~/React-Flask/docker
 docker-compose up -d
 
+echo "Setting up Node in flask container"
+docker exec --user root flask sh -c "npm install" 2> /dev/null > /dev/null
+docker exec --user root flask sh -c "run-script build" 2> /dev/null > /dev/null
+
 echo "Setting up docker "
 systemctl enable docker.service
 systemctl enable containerd.service
