@@ -12,10 +12,9 @@ ENV GROUP_ID=1337 \
 RUN addgroup -g $GROUP_ID www
 RUN adduser -D -u $USER_ID -G www www -s /bin/sh
 
-USER www
-
 # Working directory creation
 RUN mkdir /var/www
+RUN chmod 755 /var/www
 WORKDIR /var/www/
 ADD . /var/www/
 
@@ -32,5 +31,6 @@ RUN npm install
 RUN npm run-script build
 
 EXPOSE 5000
+USER www
 
 CMD [ "poetry", "run", "gunicorn", "-w", "{CPUS}", "--threads", "{CPUS}", "-t", "120", "--bind", "0.0.0.0:5000", "wsgi:app"]
