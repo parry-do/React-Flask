@@ -14,7 +14,7 @@ RUN adduser -D -u $USER_ID -G www www -s /bin/sh
 
 # Working directory creation
 RUN mkdir /var/www
-RUN chmod 755 /var/www
+RUN chmod 777 /var/www
 WORKDIR /var/www/
 ADD . /var/www/
 
