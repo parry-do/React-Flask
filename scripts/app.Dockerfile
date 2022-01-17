@@ -13,7 +13,9 @@ RUN addgroup -g $GROUP_ID www
 RUN adduser -D -u $USER_ID -G www www -s /bin/sh
 
 # Setup logging
-RUN ln -sf /dev/stdout /var/www/access.log && \
+RUN touch /var/www/access.log && \
+    touch /var/www/error.log && \
+    ln -sf /dev/stdout /var/www/access.log && \
     ln -sf /dev/stderr /var/www/error.log
 
 # Working directory creation
