@@ -12,17 +12,17 @@ ENV GROUP_ID=1337 \
 RUN addgroup -g $GROUP_ID www
 RUN adduser -D -u $USER_ID -G www www -s /bin/sh
 
-# Setup logging
-RUN touch /var/www/access.log && \
-    touch /var/www/error.log && \
-    ln -sf /dev/stdout /var/www/access.log && \
-    ln -sf /dev/stderr /var/www/error.log
-
 # Working directory creation
 RUN mkdir /var/www
 RUN chmod 755 /var/www
 WORKDIR /var/www/
 ADD . /var/www/
+
+# Setup logging
+RUN touch /var/www/access.log && \
+    touch /var/www/error.log && \
+    ln -sf /dev/stdout /var/www/access.log && \
+    ln -sf /dev/stderr /var/www/error.log
 
 # Packages for wheel and poetry installation
 RUN apk update && apk add gcc libc-dev libffi-dev openssl-dev python3-dev
