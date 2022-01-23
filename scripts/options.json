@@ -8,8 +8,6 @@
     "ADMIN_USERNAME"             : "admin",
     "ADMIN_PASSWORD"             : "theyllneverguessthis",
     "MONGODB_USERNAME"           : "mongo",
-    "MONGODB_PASSWORD"           : "mongo",
-    "MONGO_INITDB_ROOT_USERNAME" : "mongo", 
-    "MONGO_INITDB_ROOT_PASSWORD" : "mongo"
+    "MONGODB_PASSWORD"           : "mongo"
 }
 

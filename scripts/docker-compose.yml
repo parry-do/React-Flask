@@ -32,8 +32,8 @@ services:
     restart: unless-stopped
     command: mongod --auth
     environment:
-      MONGO_INITDB_ROOT_USERNAME: {MONGO_INITDB_ROOT_USERNAME}
-      MONGO_INITDB_ROOT_PASSWORD: {MONGO_INITDB_ROOT_PASSWORD}
+      MONGO_INITDB_ROOT_USERNAME: {MONGODB_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: {MONGODB_PASSWORD}
       MONGO_INITDB_DATABASE: flaskdb
       MONGODB_DATA_DIR: /db/data
       MONDODB_LOG_DIR: /dev/null

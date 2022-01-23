@@ -25,5 +25,5 @@ systemctl enable containerd.service
 
 echo "Setting up Node in flask container"
 docker exec --user root flask sh -c "npm install" 2> /dev/null > /dev/null
-docker exec --user root flask sh -c "run-script build" 2> /dev/null > /dev/null
+docker exec --user root flask sh -c "npm run-script build" 2> /dev/null > /dev/null
 

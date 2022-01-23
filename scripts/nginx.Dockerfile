@@ -7,10 +7,11 @@ RUN apk --update add nginx && \
     ln -sf /dev/stderr /var/log/nginx/error.log && \
     mkdir /etc/nginx/sites-enabled/ && \
     mkdir -p /run/nginx && \
-    rm -rf /etc/nginx/conf.d/default.conf && \
+    rm -rf /etc/nginx/http.d/default.conf && \
     rm -rf /var/cache/apk/*
 
-COPY conf.d/main.conf /etc/nginx/http.d/main.conf
+COPY conf.d/main.conf /etc/nginx/http.d/default.conf
+COPY mime.types /etc/nginx/mime.types
 
 EXPOSE 80 443
 CMD ["nginx", "-g", "daemon off;"]
