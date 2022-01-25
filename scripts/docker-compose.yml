@@ -1,12 +1,29 @@
 version: '3'
 services:
 
-  flask:
+  db:
+    image: mongo:4.0.8
+    container_name: db
+    restart: unless-stopped
+    command: /bin/sh -c "mongo flaskdb /mongo-init.js" && exec mongod --auth
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: {MONGODB_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: {MONGODB_PASSWORD}
+      MONGO_INITDB_DATABASE: flaskdb
+      MONGODB_DATA_DIR: /db/data
+      MONDODB_LOG_DIR: /dev/null
+    volumes:
+      - dbdata:/db/data
+      - ./db/init.js:/mongo-init.js:ro
+    networks:
+      - backend
+
+  app:
     build:
       context: app
       dockerfile: Dockerfile
     image: nikolaik/python-nodejs:python3.8-nodejs14-alpine
-    container_name: flask
+    container_name: app
     restart: unless-stopped
     environment:
       MODE: "deployment"
@@ -21,40 +38,23 @@ services:
     volumes:
       - appdata:/var/www
     depends_on:
-      - mongodb
+      - db
     networks:
       - frontend
       - backend
 
-  mongodb:
-    image: mongo:4.0.8
-    container_name: mongodb
-    restart: unless-stopped
-    command: mongod --auth
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: {MONGODB_USERNAME}
-      MONGO_INITDB_ROOT_PASSWORD: {MONGODB_PASSWORD}
-      MONGO_INITDB_DATABASE: flaskdb
-      MONGODB_DATA_DIR: /db/data
-      MONDODB_LOG_DIR: /dev/null
-    volumes:
-      - mongodbdata:/db/data
-      - ./db/init.js:/docker-entrypoint-initdb.d/init.js:ro
-    networks:
-      - backend
-
-  webserver:
+  nginx:
     build:
       context: nginx
       dockerfile: Dockerfile
     image: digitalocean.com/webserver:latest
-    container_name: webserver
+    container_name: nginx
     restart: unless-stopped
     environment:
       APP_ENV: "prod"
-      APP_NAME: "webserver"
+      APP_NAME: "nginx"
       APP_DEBUG: "true"
-      SERVICE_NAME: "webserver"
+      SERVICE_NAME: "nginx"
     ports:
       - "80:80"
       - "443:443"
@@ -62,7 +62,7 @@ services:
       - nginxdata:/var/log/nginx
       - appdata:/var/app/
     depends_on:
-      - flask
+      - app
     networks:
       - frontend
 
@@ -80,7 +80,7 @@ volumes:
       o: 'bind'
       device: '{APP_DIR}'
   
-  mongodbdata:
+  dbdata:
     driver: local
     driver_opts:
       type: 'none'
