@@ -91,7 +91,7 @@ with open(join(
 #####################################################
 os.mkdir(join(BASE_DIR, 'docker', 'nginx', 'conf.d'))
 shutil.copy(
-    join(BASE_DIR, 'scripts', 'main.conf'),
+    join(BASE_DIR, 'scripts', 'default.conf'),
     join(BASE_DIR, 'docker', 'nginx', 'conf.d'),
 )
 
