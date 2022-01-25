@@ -5,11 +5,11 @@ services:
     image: mongo:4.0.8
     container_name: db
     restart: unless-stopped
-    command: /bin/sh -c "mongo flaskdb /mongo-init.js" && exec mongod --auth
+    command: /bin/sh -c "mongo db /mongo-init.js" && exec mongod --auth
     environment:
       MONGO_INITDB_ROOT_USERNAME: {MONGODB_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: {MONGODB_PASSWORD}
-      MONGO_INITDB_DATABASE: flaskdb
+      MONGO_INITDB_DATABASE: db
       MONGODB_DATA_DIR: /db/data
       MONDODB_LOG_DIR: /dev/null
     volumes:
@@ -31,10 +31,10 @@ services:
       APP_ENV: "prod"
       APP_DEBUG: "False"
       APP_PORT: 5000
-      MONGODB_DATABASE: flaskdb
+      MONGODB_DATABASE: db
       MONGODB_USERNAME: {MONGODB_USERNAME}
       MONGODB_PASSWORD: {MONGODB_PASSWORD}
-      MONGODB_HOSTNAME: mongodb
+      MONGODB_HOSTNAME: db
     volumes:
       - appdata:/var/www
     depends_on:
