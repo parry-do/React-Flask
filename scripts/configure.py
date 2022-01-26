@@ -69,6 +69,8 @@ with open(join(BASE_DIR,'scripts','docker-compose.yml'),'r') as f:
 # Mongo init file is created with correct options
 #####################################################
 init_file = """
+db = db.getSiblingDB('flaskdb')
+
 db.createUser({{
     'user' : '{MONGODB_USERNAME}',
     'pwd'  : '{MONGODB_PASSWORD}',

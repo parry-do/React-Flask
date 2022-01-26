@@ -18,12 +18,6 @@ RUN chmod 777 /var/www
 WORKDIR /var/www/
 ADD . /var/www/
 
-# Setup logging
-RUN touch /var/www/access.log && \
-    touch /var/www/error.log && \
-    ln -sf /dev/stdout /var/www/access.log && \
-    ln -sf /dev/stderr /var/www/error.log
-
 # Packages for wheel and poetry installation
 RUN apk update && apk add gcc libc-dev libffi-dev openssl-dev python3-dev
 

@@ -5,7 +5,7 @@ services:
     image: mongo:4.0.8
     container_name: db
     restart: unless-stopped
-    command: /bin/sh -c "mongo db /mongo-init.js" && exec mongod --auth
+    command: mongod --auth
     environment:
       MONGO_INITDB_ROOT_USERNAME: {MONGODB_USERNAME}
       MONGO_INITDB_ROOT_PASSWORD: {MONGODB_PASSWORD}

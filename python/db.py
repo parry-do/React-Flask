@@ -37,10 +37,10 @@ def connect(app):
         db = mongoengine
 
         db.connect(  # Deployment db server
-            db       = get_key('MONGODB_DATABASE'),
+            db       = 'flaskdb',
             username = get_key('MONGODB_USERNAME'),
             password = get_key('MONGODB_PASSWORD'),
-            host     = get_key('MONGODB_HOSTNAME'),
+            host     = 'mongodb',
             port     = 27017,
         )
     else:
