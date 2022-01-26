@@ -19,7 +19,8 @@ WORKDIR /var/www/
 ADD . /var/www/
 
 # Packages for wheel and poetry installation
-RUN apk update && apk add gcc libc-dev libffi-dev openssl-dev python3-dev
+RUN apk update && apk add gcc libc-dev libffi-dev openssl-dev python3-dev && \
+    rm -rf /var/cache/apk/*
 
 # Poetry installation
 RUN pip install 'poetry==1.1.6'
@@ -29,4 +30,6 @@ RUN poetry install --no-dev
 EXPOSE 5000
 USER www
 
-CMD [ "poetry", "run", "gunicorn", "-w", "{CPUS}", "--threads", "{CPUS}", "-t", "120", "--bind", "0.0.0.0:5000", "wsgi:app"]
+#CMD [ "poetry", "run", "gunicorn", "-w", "{CPUS}", "--threads", "{CPUS}", "-t", "120", "--bind", "0.0.0.0:5000", "wsgi:app"]
+
+CMD ["sleep", "1337"]
