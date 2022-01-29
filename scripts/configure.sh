@@ -17,7 +17,7 @@ python3 ~/React-Flask/scripts/configure.py
 
 echo "Building docker images"
 cd ~/React-Flask/docker
-docker-compose up -d
+docker-compose up -d --force-recreate
 
 echo "Setting up docker "
 systemctl enable docker.service
