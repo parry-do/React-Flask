@@ -12,5 +12,7 @@ RUN apk --update add nginx && \
 
 COPY conf.d/default.conf /etc/nginx/http.d/default.conf
 
+RUN sed -i 's/js;/js jsx;/' /etc/nginx/mime.types
+
 EXPOSE 80 443
 CMD ["nginx", "-g", "daemon off;"]
