@@ -40,7 +40,7 @@ def connect(app):
             db       = 'flaskdb',
             username = get_key('MONGODB_USERNAME'),
             password = get_key('MONGODB_PASSWORD'),
-            host     = 'mongodb',
+            host     = 'db',
             port     = 27017,
         )
     else:
