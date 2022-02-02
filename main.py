@@ -195,4 +195,6 @@ if __name__ == '__main__':
         app.run(host='0.0.0.0', port=8080, debug=True)
     else:
         # Deployment mode
-        # app.run(host='0.0.0.0', port=8080)
+        # Change this for actual deployment
+        initialize(db)
+        pass
