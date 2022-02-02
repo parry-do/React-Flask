@@ -1,4 +1,5 @@
 import os
+import json
 import requests
 
 from flask import (
@@ -7,25 +8,46 @@ from flask import (
     send_from_directory,
 )
 
+import mongoengine
 import flask_login as login
 
-from python.db import connect, get_user, User, Global, initialize
+from python.db import get_user, User, Global, initialize
 
 ###################################################
 # App Configuration
 ###################################################
 # Server mode
-mode = os.environ.get('MODE')
-if mode is None or mode=='deployment':
-    # Deployment server, statics by reverse proxy
-    mode = 'deployment'
+def get_key(key, default=''):
+    if os.environ.get(key):
+        app.config[key] = os.environ.get(key)
+    else:
+        with open('scripts/options.json') as config_file:
+            app.config[key] = json.load(config_file).get(
+                key, default
+            )
+get_key('SECRET_KEY', 'KEEPITSECRETkeepitsafe')
+get_key('COOKIE_LIFESPAN', {'months': 12})
+
+mode = get_key('MODE', 'deployment')
+if mode=='deployment':
+    # Deployment server, actual mongodb
+    mode == 'deployment'
     app = Flask(__name__)
+    db = mongoengine.connect(host=f"mongodb://{get_key('MONGODB_USERNAME')}:{get_key('MONGODB_PASSWORD')}@db:27017/flaskdb?authSource=admin")
+
 else:
-    # Replit prod/dev, statics by Flask
+    # Replit prod/dev, db by mongomock, statics by Flask
     app = Flask(__name__, static_url_path='/dist')
+    db = mongoengine
+    db.connect("test", host="mongomock://localhost")
 
 # App services initiation
-db = connect(app)
+login_manager = login.LoginManager()
+login_manager.init_app(app)
+login_manager.user_loader(get_user)
+@login_manager.unauthorized_handler
+def unauthorized_handler():
+    return 'Unauthorized'
 
 ###################################################
 # Login routes
