@@ -13,6 +13,20 @@ class Global(mongoengine.Document):
         name  = mongoengine.fields.StringField(unique=True)
         total = mongoengine.fields.LongField(default=0)
 
+# User getting function
+def get_user(username, password=None):
+    "Checks password if not None"
+    try:
+        user = User.objects.get(username=username)
+    except mongoengine.DoesNotExist:
+        return None
+    
+    if password is None:
+        match = True
+    else:
+        match = check_hash(user['password'], password)
+    return user if user and match else None
+
 def connect(app):
     # Connects the provided app to the database
     # Returns db (mongoengine) object and get_user function
@@ -36,6 +50,9 @@ def connect(app):
         # Deployment server, actual mongo db
         db = mongoengine
 
+        db.connect(host=f"mongodb://{get_key('MONGODB_USERNAME')}:{get_key('MONGODB_PASSWORD')}@db:27017/flaskdb?authSource=admin")
+        
+        """
         db.connect(  # Deployment db server
             db       = 'flaskdb',
             username = get_key('MONGODB_USERNAME'),
@@ -43,24 +60,11 @@ def connect(app):
             host     = 'db',
             port     = 27017,
         )
+        """
     else:
         # Replit prod/dev, db by mongomock
         db = mongoengine
         db.connect("test", host="mongomock://localhost")
-
-    # User getting function
-    def get_user(username, password=None):
-        "Checks password if not None"
-        try:
-            user = User.objects.get(username=username)
-        except mongoengine.DoesNotExist:
-            return None
-        
-        if password is None:
-            match = True
-        else:
-            match = check_hash(user['password'], password)
-        return user if user and match else None
 
     # security system is initialized
     login_manager = login.LoginManager()
@@ -70,7 +74,7 @@ def connect(app):
     def unauthorized_handler():
         return 'Unauthorized'
 
-    return db, get_user
+    return db
 
 def initialize(db):
     # Database is initialized

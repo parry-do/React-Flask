@@ -9,7 +9,7 @@ from flask import (
 
 import flask_login as login
 
-from python.db import connect, User, Global, initialize
+from python.db import connect, get_user, User, Global, initialize
 
 ###################################################
 # App Configuration
@@ -25,7 +25,7 @@ else:
     app = Flask(__name__, static_url_path='/dist')
 
 # App services initiation
-db, get_user = connect(app)
+db = connect(app)
 
 ###################################################
 # Login routes
@@ -195,4 +195,4 @@ if __name__ == '__main__':
         app.run(host='0.0.0.0', port=8080, debug=True)
     else:
         # Deployment mode
-        app.run(host='0.0.0.0', port=8080)
+        # app.run(host='0.0.0.0', port=8080)
