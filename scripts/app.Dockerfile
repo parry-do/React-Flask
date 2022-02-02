@@ -30,6 +30,6 @@ RUN poetry install --no-dev
 EXPOSE 5000
 USER www
 
-#CMD [ "poetry", "run", "gunicorn", "-w", "{CPUS}", "--threads", "{CPUS}", "-t", "120", "--bind", "0.0.0.0:5000", "wsgi:app"]
+CMD [ "poetry", "run", "gunicorn", "-w", "{CPUS}", "--threads", "{CPUS}", "-t", "120", "--bind", "0.0.0.0:5000", "wsgi:app"]
 
-CMD ["sleep", "1337"]
+#CMD ["sleep", "133700"]
