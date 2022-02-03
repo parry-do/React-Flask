@@ -18,7 +18,7 @@ from python.db import get_user, User, Global, initialize
 ###################################################
 # Server mode
 
-mode = os.environ.get(key) or 'deployment'
+mode = os.environ.get('MODE') or 'deployment'
 
 if mode == 'deployment':
     # Deployment server, actual mongodb
