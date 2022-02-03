@@ -14,7 +14,7 @@ services:
       MONDODB_LOG_DIR: /dev/null
     volumes:
       - dbdata:/db/data
-      - ./db/init.js:/mongo-init.js:ro
+      - ./db/init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
     networks:
       - backend
 
