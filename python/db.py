@@ -1,8 +1,6 @@
 import os
 import json
 
-import flask_login as login
-
 from werkzeug.security import check_password_hash as check_hash
 
 import mongoengine

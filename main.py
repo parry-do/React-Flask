@@ -17,6 +17,17 @@ from python.db import get_user, User, Global, initialize
 # App Configuration
 ###################################################
 # Server mode
+
+mode = os.environ.get(key) or 'deployment'
+
+if mode == 'deployment':
+    # Deployment server, actual mongodb
+    app = Flask(__name__)
+else:
+    # Replit prod/dev, db by mongomock, statics by Flask
+    app = Flask(__name__, static_url_path='/dist')
+
+
 def get_key(key, default=''):
     if os.environ.get(key):
         app.config[key] = os.environ.get(key)
@@ -28,16 +39,12 @@ def get_key(key, default=''):
 get_key('SECRET_KEY', 'KEEPITSECRETkeepitsafe')
 get_key('COOKIE_LIFESPAN', {'months': 12})
 
-mode = get_key('MODE', 'deployment')
-if mode=='deployment':
+if mode == 'deployment':
     # Deployment server, actual mongodb
-    mode == 'deployment'
-    app = Flask(__name__)
-    db = mongoengine.connect(host=f"mongodb://{get_key('MONGODB_USERNAME')}:{get_key('MONGODB_PASSWORD')}@db:27017/flaskdb?authSource=admin")
+    db = mongoengine.connect(host=f"mongodb://{('MONGODB_USERNAME')}:{get_key('MONGODB_PASSWORD')}@db:27017/flaskdb?authSource=admin")
 
 else:
     # Replit prod/dev, db by mongomock, statics by Flask
-    app = Flask(__name__, static_url_path='/dist')
     db = mongoengine
     db.connect("test", host="mongomock://localhost")
 
