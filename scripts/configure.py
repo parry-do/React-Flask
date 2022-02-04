@@ -84,7 +84,7 @@ db.createUser({{
 """.format(**options)
 
 with open(join(
-    BASE_DIR,'docker','db','mongo-init.js'),'w'
+    BASE_DIR,'docker','db','init.js'),'w'
 ) as w:
     w.write(init_file)
 
