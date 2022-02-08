@@ -212,7 +212,8 @@ elif mode == 'production':
 
 else:
     # Deployment. Reverse proxy will handle statics.
-    pass
+    initialize(db)
+    
 
 def production():
     # Replit production mode
