@@ -41,7 +41,7 @@ get_key('COOKIE_LIFESPAN', {'months': 12})
 
 if mode == 'deployment':
     # Deployment server, actual mongodb
-    db = mongoengine.connect(host=f"mongodb://{('MONGODB_USERNAME')}:{get_key('MONGODB_PASSWORD')}@db:27017/db")
+    db = mongoengine.connect(host=f"mongodb://{get_key('MONGODB_USERNAME')}:{get_key('MONGODB_PASSWORD')}@db:27017/db")
 
 else:
     # Replit prod/dev, db by mongomock, statics by Flask
