@@ -40,7 +40,7 @@ for k,v in {
     'SECRET_KEY'      : 'KEEPITSECRETkeepitsafe',
     'COOKIE_LIFESPAN' : {'months': 12},
     'MONGODB_USERNAME': 'mongo',
-    'MONGODB_password': 'mongo',
+    'MONGODB_PASSWORD': 'mongo',
     }.items():
     get_key(k,v)
 
