@@ -1,17 +1,53 @@
 import os
 import json
 
+from flask_login import UserMixin
+
 from werkzeug.security import check_password_hash as check_hash
+from werkzeug.security import generate_password_hash as make_hash
 
 import mongoengine
 
-from python.user import User
+class User(mongoengine.Document, UserMixin):
+    meta = {'collection': 'user'}
+    username  = mongoengine.fields.StringField(
+        required=True,
+        unique=True,
+    )
+    password  = mongoengine.fields.StringField(required=True)
+    roles     = mongoengine.fields.StringField(default='')
+    hits      = mongoengine.fields.LongField(default=0)
+    is_active = mongoengine.fields.BooleanField(default=True)
+
+    def get_id(self):
+        return self.username
+
+    def __repr__(self):
+        return f"<User:{self.username} {self.password}>"
+    
+    def __str__(self):
+        return self.__repr__()
+
+    @classmethod
+    def post_save(cls, sender, document, created):
+        # Automatically hash passwords on User creation
+        if created:
+            document['password'] = make_hash(
+                document['password']
+            )
+            document.save()
+
+mongoengine.signals.post_save.connect(
+    User.post_save, sender=User
+)
 
 class Global(mongoengine.Document):
         name  = mongoengine.fields.StringField(unique=True)
         total = mongoengine.fields.LongField(default=0)
 
 # User getting function
+
+
 def get_user(username, password=None):
     "Checks password if not None"
     try:
@@ -25,11 +61,11 @@ def get_user(username, password=None):
         match = check_hash(user['password'], password)
     return user if user and match else None
 
+
+
 def initialize():
     # Database is initialized
-    mode = os.environ.get('MODE')
-    if mode is None:
-        mode == 'deployment'
+    mode = os.environ.get('MODE') or 'deployment'
     if mode != 'deployment':
         print('*' * 10, 'Creating Dummy Database', '*' * 10)
         User(username='admin', password='admin').save()
@@ -54,6 +90,4 @@ def initialize():
 
     Global(name="Global Visits").save()
     
-if __name__ == "__main__":
-    initialize()
-    
+

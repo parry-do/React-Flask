@@ -9,11 +9,7 @@ import json
 ##############################################
 # Establish correct working directories
 ##############################################
-BASE_DIR = split(
-    os.path.dirname(
-        os.path.realpath(__file__)
-    )
-)[0]
+BASE_DIR = split(os.path.dirname(os.path.realpath(__file__)))[0]
 os.chdir(BASE_DIR)
 
 for path in [[], ['db'], ['nginx'], ['app']]:
@@ -33,14 +29,15 @@ for path in [[], ['db'], ['nginx'], ['app']]:
 # The options dictionary is created
 ##############################################
 import multiprocessing
+
 chars = string.ascii_letters + string.digits
 options = {
-    'SECRET_KEY' : ''.join(random.sample(chars,32)),
-    'BASE_DIR'   : BASE_DIR,
-    'DB_DIR'     : join(BASE_DIR, 'docker', 'db'),
-    'NGINX_DIR'  : join(BASE_DIR, 'docker', 'nginx'),
-    'APP_DIR'    : join(BASE_DIR, 'docker', 'app'),
-    'CPUS'       : 2* multiprocessing.cpu_count() + 1,
+    'SECRET_KEY': ''.join(random.sample(chars, 32)),
+    'BASE_DIR': BASE_DIR,
+    'DB_DIR': join(BASE_DIR, 'docker', 'db'),
+    'NGINX_DIR': join(BASE_DIR, 'docker', 'nginx'),
+    'APP_DIR': join(BASE_DIR, 'docker', 'app'),
+    'CPUS': 2 * multiprocessing.cpu_count() + 1,
 }
 with open('scripts/options.json', 'r') as f:
     options.update(json.load(f))
@@ -50,23 +47,33 @@ with open('scripts/options.json', 'r') as f:
 ###############################################
 for path in ['app', 'nginx']:
     name = f'{path}.Dockerfile'
-    with open(join(BASE_DIR,'scripts',name),'r') as f:
-        with open(join(
-                BASE_DIR, 'docker', path, 'Dockerfile'
-        ),'w') as w:
+    with open(join(BASE_DIR, 'scripts', name), 'r') as f:
+        with open(join(BASE_DIR, 'docker', path, 'Dockerfile'), 'w') as w:
             w.write(f.read().format(**options))
 
 #####################################################
 # Docker-compose file is created with correct options
 #####################################################
-with open(join(BASE_DIR,'scripts','docker-compose.yml'),'r') as f:
-    with open(
-        join(BASE_DIR,'docker','docker-compose.yml'),'w'
-    ) as w:
+with open(join(BASE_DIR, 'scripts', 'docker-compose.yml'), 'r') as f:
+    with open(join(BASE_DIR, 'docker', 'docker-compose.yml'), 'w') as w:
         w.write(f.read().format(**options))
 
 #####################################################
-# Mongo init file is created with correct options
+# App database initialization file
+#####################################################
+init_file = """
+db =   mongoengine
+from python.db import initialize
+mongoengine.connect(host="mongodb://{'MONGODB_USERNAME'}:{'MONGODB_PASSWORD'}@db:27017/db")
+""".fo
+
+initialize()rmat(**options)
+
+with open(join(BASE_DIR, 'docker', 'app', 'init.py'), 'w') as w:
+    w.write(init_file)
+        
+#####################################################
+# Mongo init fdbile is created with correct options
 #####################################################
 init_file = """
 db.auth('{MONGODB_USERNAME}', '{MONGODB_PASSWORD}')
@@ -85,9 +92,7 @@ db.createUser({{
 }});
 """.format(**options)
 
-with open(join(
-    BASE_DIR,'docker','db','init.js'),'w'
-) as w:
+with open(join(BASE_DIR, 'docker', 'db', 'init.js'), 'w') as w:
     w.write(init_file)
 
 #####################################################
@@ -103,8 +108,11 @@ shutil.copy(
 # app files are copied
 #####################################################
 targets = [
-    'main.py', 'index.html', 'vite.config.js',
-    'package.json', 'pyproject.toml',
+    'main.py',
+    'index.html',
+    'vite.config.js',
+    'package.json',
+    'pyproject.toml',
 ]
 for target in targets:
     shutil.copy(
@@ -112,7 +120,9 @@ for target in targets:
         join(BASE_DIR, 'docker', 'app', target),
     )
 targets = [
-    'python', 'react', 'scripts',
+    'python',
+    'react',
+    'scripts',
 ]
 for target in targets:
     copy_tree(
@@ -123,12 +133,10 @@ for target in targets:
 #####################################################
 # wsgi file is created
 #####################################################
-wsgi_file="""from main import app
+wsgi_file = """from main import app
 
 if __name__ == "__main__":
     app.run()
 """
-with open(join(
-    BASE_DIR,'docker','app','wsgi.py'),'w'
-) as w:
+with open(join(BASE_DIR, 'docker', 'app', 'wsgi.py'), 'w') as w:
     w.write(wsgi_file)
