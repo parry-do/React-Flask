@@ -212,24 +212,17 @@ elif mode == 'production':
 
 else:
     # Deployment. Reverse proxy will handle statics.
-    initialize(db)
+    pass
     
-
 def production():
     # Replit production mode
-    initialize(db)
+    initialize()
     return app
 
 ###################################################
 # Run as __main__, typically Replit environment
 ###################################################
 if __name__ == '__main__':
-    if mode == 'development':
-        # Replit development mode
-        initialize(db)
-        app.run(host='0.0.0.0', port=8080, debug=True)
-    else:
-        # Deployment mode
-        # Change this for actual deployment
-        initialize(db)
-        pass
+    # Replit development mode
+    initialize()
+    app.run(host='0.0.0.0', port=8080, debug=True)

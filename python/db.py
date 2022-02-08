@@ -25,7 +25,7 @@ def get_user(username, password=None):
         match = check_hash(user['password'], password)
     return user if user and match else None
 
-def initialize(db):
+def initialize():
     # Database is initialized
     mode = os.environ.get('MODE')
     if mode is None:
@@ -53,3 +53,7 @@ def initialize(db):
         ).save()
 
     Global(name="Global Visits").save()
+    
+if __name__ == "__main__":
+    initialize()
+    

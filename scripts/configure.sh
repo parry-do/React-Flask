@@ -26,3 +26,6 @@ systemctl enable containerd.service
 echo "Setting up Node in app container"
 docker exec --user root app sh -c "npm install"
 docker exec --user root app sh -c "npm run-script build"
+
+echo "Initializing db"
+docker exec --user root app sh -c "python ./python/db.py"
