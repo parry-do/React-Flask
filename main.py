@@ -27,7 +27,7 @@ else:
     # Replit prod/dev, db by mongomock, statics by Flask
     app = Flask(__name__, static_url_path='/dist')
 
-
+# Environment options for the app are acquired
 def get_key(key, default=''):
     if os.environ.get(key):
         app.config[key] = os.environ.get(key)
@@ -36,13 +36,20 @@ def get_key(key, default=''):
             app.config[key] = json.load(config_file).get(
                 key, default
             )
+for k,v in {
+    'SECRET_KEY'      : 'KEEPITSECRETkeepitsafe',
+    'COOKIE_LIFESPAN' : {'months': 12},
+    'MONGODB_USERNAME': 'mongo',
+    'MONGODB_password': 'mongo',
+    }.items():
+    get_key(k,v)
 get_key('SECRET_KEY', 'KEEPITSECRETkeepitsafe')
 get_key('COOKIE_LIFESPAN', {'months': 12})
 
+# Database connection is acquired
 if mode == 'deployment':
     # Deployment server, actual mongodb
-    db = mongoengine.connect(host=f"mongodb://{get_key('MONGODB_USERNAME')}:{get_key('MONGODB_PASSWORD')}@db:27017/db")
-
+    db = mongoengine.connect(host=f"mongodb://{app.config['MONGODB_USERNAME']}:{app.config['MONGODB_PASSWORD']}@db:27017/db")
 else:
     # Replit prod/dev, db by mongomock, statics by Flask
     db = mongoengine
