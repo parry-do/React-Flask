@@ -43,8 +43,6 @@ for k,v in {
     'MONGODB_password': 'mongo',
     }.items():
     get_key(k,v)
-get_key('SECRET_KEY', 'KEEPITSECRETkeepitsafe')
-get_key('COOKIE_LIFESPAN', {'months': 12})
 
 # Database connection is acquired
 if mode == 'deployment':
