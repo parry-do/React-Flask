@@ -37,13 +37,8 @@ options = {
     'NGINX_DIR': join(BASE_DIR, 'docker', 'nginx'),
     'APP_DIR': join(BASE_DIR, 'docker', 'app'),
     'CPUS': 2 * multiprocessing.cpu_count() + 1,
-<<<<<<< HEAD
     'MONGODB_USERNAME':os.environ['MONGODB_USERNAME'] if 'MONGODB_USERNAME' in os.environ else 'mongo',
     'MONGODB_PASSWORD':os.environ['MONGODB_PASSWORD'] if 'MONGODB_PASSWORD' in os.environ else 'mongo',
-=======
-    'MONGODB_USERNAME':os.environ['MONGODB_USERNAME'] or 'mongo',
-    'MONGODB_PASSWORD':os.environ['MONGODB_PASSWORD'] or 'mongo',
->>>>>>> origin/main
 }
 with open('scripts/options.json', 'r') as f:
     options.update(json.load(f))
