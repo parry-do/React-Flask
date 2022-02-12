@@ -24,7 +24,6 @@ for path in [[], ['db'], ['nginx'], ['app']]:
 ##############################################
 # Files are loaded into /docker
 ##############################################
-
 ##############################################
 # The options dictionary is created
 ##############################################
@@ -38,6 +37,8 @@ options = {
     'NGINX_DIR': join(BASE_DIR, 'docker', 'nginx'),
     'APP_DIR': join(BASE_DIR, 'docker', 'app'),
     'CPUS': 2 * multiprocessing.cpu_count() + 1,
+    'MONGODB_USERNAME':os.environ['MONGODB_USERNAME'] or 'mongo',
+    'MONGODB_PASSWORD':os.environ['MONGODB_PASSWORD'] or 'mongo',
 }
 with open('scripts/options.json', 'r') as f:
     options.update(json.load(f))
@@ -62,12 +63,11 @@ with open(join(BASE_DIR, 'scripts', 'docker-compose.yml'), 'r') as f:
 # App database initialization file
 #####################################################
 init_file = """
-db =   mongoengine
+db = mongoengine
 from python.db import initialize
 mongoengine.connect(host="mongodb://{'MONGODB_USERNAME'}:{'MONGODB_PASSWORD'}@db:27017/db")
-""".fo
-
-initialize()rmat(**options)
+imitialize()
+""".format(**options)
 
 with open(join(BASE_DIR, 'docker', 'app', 'init.py'), 'w') as w:
     w.write(init_file)

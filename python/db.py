@@ -46,8 +46,6 @@ class Global(mongoengine.Document):
         total = mongoengine.fields.LongField(default=0)
 
 # User getting function
-
-
 def get_user(username, password=None):
     "Checks password if not None"
     try:
@@ -60,8 +58,6 @@ def get_user(username, password=None):
     else:
         match = check_hash(user['password'], password)
     return user if user and match else None
-
-
 
 def initialize():
     # Database is initialized
@@ -89,5 +85,3 @@ def initialize():
         ).save()
 
     Global(name="Global Visits").save()
-    
-

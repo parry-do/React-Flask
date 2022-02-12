@@ -212,6 +212,7 @@ elif mode == 'production':
 
 else:
     # Deployment. Reverse proxy will handle statics.
+    # Single db initialization at setup, not by app
     pass
     
 def production():

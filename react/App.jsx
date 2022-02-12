@@ -59,7 +59,7 @@ const App = () => {
                 </Grid>
                 } {(!!user.username) && 
                 <Grid item xs={12}>
-                React⚛️ + Vite⚡ + Flask🧪 + Auth🔐 + MongoDB🍃 + Replit🌀 = Awesome🤯
+                React⚛️ + Vite⚡ + Material UI 📑 + Flask🧪 + Auth🔐 + MongoDB🍃 + Replit🌀 = Awesome🤯
                 </Grid>
                 }
                 </Typography>
