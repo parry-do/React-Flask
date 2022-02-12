@@ -12,7 +12,7 @@
 
 These three are one of the fastest ways to build a web app with a powerful backend.
 
-### Getting Started
+### Getting Started on Replit development server
 - Hit run
 - Edit [src/App.jsx](#src/App.jsx) and watch it live update!
 - Edit main.py to change the backend
