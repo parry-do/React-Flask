@@ -37,8 +37,13 @@ options = {
     'NGINX_DIR': join(BASE_DIR, 'docker', 'nginx'),
     'APP_DIR': join(BASE_DIR, 'docker', 'app'),
     'CPUS': 2 * multiprocessing.cpu_count() + 1,
+<<<<<<< HEAD
     'MONGODB_USERNAME':os.environ['MONGODB_USERNAME'] if 'MONGODB_USERNAME' in os.environ else 'mongo',
     'MONGODB_PASSWORD':os.environ['MONGODB_PASSWORD'] if 'MONGODB_PASSWORD' in os.environ else 'mongo',
+=======
+    'MONGODB_USERNAME':os.environ['MONGODB_USERNAME'] or 'mongo',
+    'MONGODB_PASSWORD':os.environ['MONGODB_PASSWORD'] or 'mongo',
+>>>>>>> origin/main
 }
 with open('scripts/options.json', 'r') as f:
     options.update(json.load(f))
@@ -64,6 +69,7 @@ with open(join(BASE_DIR, 'scripts', 'docker-compose.yml'), 'r') as f:
 #####################################################
 init_file = """import mongoengine
 from python.db import initialize
+<<<<<<< HEAD
 mongoengine.connect(host="mongodb://{MONGODB_USERNAME}:{MONGODB_PASSWORD}@db:27017/db")
 initialize()
 """.format(**options)
