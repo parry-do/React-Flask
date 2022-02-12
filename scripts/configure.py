@@ -69,7 +69,6 @@ with open(join(BASE_DIR, 'scripts', 'docker-compose.yml'), 'r') as f:
 #####################################################
 init_file = """import mongoengine
 from python.db import initialize
-<<<<<<< HEAD
 mongoengine.connect(host="mongodb://{MONGODB_USERNAME}:{MONGODB_PASSWORD}@db:27017/db")
 initialize()
 """.format(**options)
